@@ -1,0 +1,51 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LemonEngine.Main", "LemonEngine.Main\LemonEngine.Main.csproj", "{D1448252-00C2-446A-BA3E-AF089517808E}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Render", "Render", "{00A34BD5-A1AE-4FE4-A7D3-E6D8C39EFC29}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LemonEngine.RenderLogic", "LemonEngine.RenderLogic\LemonEngine.RenderLogic.csproj", "{7CD2492E-8017-42E8-BCF5-9629F66F04EA}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure", "Infrastructure", "{CAD21D41-069C-4699-86E6-2C8C5C207AE3}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Logic", "Logic", "{C126D871-D5D3-4AF2-AC05-117630691937}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LemonEngine.Logic", "LemonEngine.Logic\LemonEngine.Logic.csproj", "{5EE511E0-DA56-4992-83C5-5EE2AAA62961}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LemonEngine.Infrastructure", "LemonEngine.Infrastructure\LemonEngine.Infrastructure.csproj", "{1810787D-C853-4D8F-B992-0DE04C14AD2E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D1448252-00C2-446A-BA3E-AF089517808E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D1448252-00C2-446A-BA3E-AF089517808E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D1448252-00C2-446A-BA3E-AF089517808E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D1448252-00C2-446A-BA3E-AF089517808E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7CD2492E-8017-42E8-BCF5-9629F66F04EA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7CD2492E-8017-42E8-BCF5-9629F66F04EA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7CD2492E-8017-42E8-BCF5-9629F66F04EA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7CD2492E-8017-42E8-BCF5-9629F66F04EA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5EE511E0-DA56-4992-83C5-5EE2AAA62961}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5EE511E0-DA56-4992-83C5-5EE2AAA62961}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5EE511E0-DA56-4992-83C5-5EE2AAA62961}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5EE511E0-DA56-4992-83C5-5EE2AAA62961}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1810787D-C853-4D8F-B992-0DE04C14AD2E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1810787D-C853-4D8F-B992-0DE04C14AD2E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1810787D-C853-4D8F-B992-0DE04C14AD2E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1810787D-C853-4D8F-B992-0DE04C14AD2E}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{7CD2492E-8017-42E8-BCF5-9629F66F04EA} = {00A34BD5-A1AE-4FE4-A7D3-E6D8C39EFC29}
+		{5EE511E0-DA56-4992-83C5-5EE2AAA62961} = {C126D871-D5D3-4AF2-AC05-117630691937}
+		{1810787D-C853-4D8F-B992-0DE04C14AD2E} = {CAD21D41-069C-4699-86E6-2C8C5C207AE3}
+	EndGlobalSection
+EndGlobal
