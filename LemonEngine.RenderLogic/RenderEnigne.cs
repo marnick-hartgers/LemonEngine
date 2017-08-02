@@ -11,8 +11,14 @@ namespace LemonEngine.RenderLogic
 
         private RenderService _renderService;
 
-        public void StartLoad()
+        public void StartLoad(OpenGL gl)
         {
+            gl.Enable(OpenGL.GL_BLEND);
+            gl.Enable(OpenGL.GL_TEXTURE_2D);
+            gl.Enable(OpenGL.GL_DEPTH_TEST);
+            //fffgl.Enable(OpenGL.GL_LIGHTING);
+            gl.BlendFunc(OpenGL.GL_SRC_ALPHA, OpenGL.GL_ONE_MINUS_SRC_ALPHA);
+            gl.ShadeModel(OpenGL.GL_SMOOTH);
             _renderService = new RenderService();
             _renderService.Init();
             SignalLoadDone();
@@ -23,14 +29,15 @@ namespace LemonEngine.RenderLogic
             OnLoadDone?.Invoke(this, EventArgs.Empty);
         }
 
-        public void AddRenderable(IRenderable renderable)
+        public IRenderable AddRenderable(string model, string material)
         {
-
+            return _renderService.AddRenderable(model, material);
         }
 
         public void Render(OpenGL gl)
         {
-
+            _renderService.Render(gl);
+            gl.Flush();
         }
     }
 }

@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using LemonEngine.Infrastructure.Render.Renderable.Model;
 using LemonEngine.Infrastructure.Types;
 using LemonEngine.Infrastructure.Types.Render;
+using LemonEngine.RenderLogic.Renderables.Model;
 
 namespace LemonEngine.RenderLogic.ModelLoader
 {
@@ -13,9 +16,9 @@ namespace LemonEngine.RenderLogic.ModelLoader
     {
         private string resourceFolder = "";
 
-        public List<ObjModel> ReadFolder()
+        public List<Model> ReadFolder()
         {
-            List<ObjModel> models = new List<ObjModel>();
+            List<Model> models = new List<Model>();
             MakeFolder();
             var filesToRead = GetFiles();
             foreach (var filename in filesToRead)
@@ -49,13 +52,13 @@ namespace LemonEngine.RenderLogic.ModelLoader
             return filenames;
         }
 
-        private ObjModel ReadFile(string filename)
+        private Model ReadFile(string filename)
         {
             var fileStream = new StreamReader(filename);
-            ObjModel model = new ObjModel();
+            Model model = new Model();
             model.Name = Path.GetFileNameWithoutExtension(filename);
             string line = "";
-            ObjModelPart workingObject = null;
+            ModelPart workingObject = null;
             while ((line = fileStream.ReadLine()) != null)
             {
                 line = line.Trim();
@@ -78,13 +81,13 @@ namespace LemonEngine.RenderLogic.ModelLoader
                             SetWorkingMaterial(workingObject, value);
                             break;
                         case "V":
-                            AddVertex(workingObject, value);
+                            AddVertex(model, value);
                             break;
                         case "VT":
-                            AddVertexTexture(workingObject, value);
+                            AddVertexTexture(model, value);
                             break;
                         case "VN":
-                            AddVertexNormal(workingObject, value);
+                            AddVertexNormal(model, value);
                             break;
                         case "F":
                             AddFace(workingObject, value);
@@ -99,40 +102,72 @@ namespace LemonEngine.RenderLogic.ModelLoader
             return model;
         }
 
-        private void AddFace(ObjModelPart workingObject, string value)
+        private void AddFace(ModelPart workingObject, string value)
         {
-            ObjModelPartFace face = new ObjModelPartFace();
-            var values = ParseFloatsFromString(value);
+            ModelPartFace face = new ModelPartFace();
+            var values = ParseIntsFromString(value);
             if (values.Length == 3)
             {
-                Vec3 vertex = new Vec3(values[0], values[1], values[2]);
+                Int4 vertex = new Int4(values[0] - 1, values[1] - 1, values[2] - 1, -1);
                 face.Vertex = vertex;
-            }else if (values.Length == 6)
+                face.DrawType = DrawType.Triangle;
+            }
+            else if(values.Length == 4)
             {
-                Vec3 vertex = new Vec3(values[0], values[2], values[4]);
-                Vec3 texcor = new Vec3(values[1], values[3], values[5]);
+                Int4 vertex = new Int4(values[0] - 1, values[1] - 1, values[2] - 1, values[3] - 1);
+                face.Vertex = vertex;
+                face.DrawType = DrawType.Quad;
+            }
+            else if (values.Length == 6)
+            {
+                Int4 vertex = new Int4(values[0] - 1, values[2] - 1, values[4] - 1, -1);
+                Int4 texcor = new Int4(values[1] - 1, values[3] - 1, values[5] - 1, -1);
                 face.Vertex = vertex;
                 face.VertexTexture = texcor;
+                face.DrawType = DrawType.TriangleTexture;
+            }
+            else if (values.Length == 8)
+            {
+                Int4 vertex = new Int4(values[0] - 1, values[2] - 1, values[4] - 1, values[6] - 1);
+                Int4 texcor = new Int4(values[1] - 1, values[3] - 1, values[5] - 1, values[7] - 1);
+                face.Vertex = vertex;
+                face.VertexTexture = texcor;
+                face.DrawType = DrawType.QuadTexture;
             }
             else if (values.Length == 9)
             {
-                Vec3 vertex = new Vec3(values[0], values[3], values[6]);
-                Vec3 texcor = new Vec3(values[1], values[4], values[7]);
-                Vec3 normal = new Vec3(values[2], values[5], values[8]);
+                Int4 vertex = new Int4(values[0] - 1, values[3] - 1, values[6] - 1, -1);
+                Int4 texcor = new Int4(values[1] - 1, values[4] - 1, values[7] - 1, -1);
+                Int4 normal = new Int4(values[2] - 1, values[5] - 1, values[8] - 1, -1);
                 face.Vertex = vertex;
                 face.VertexTexture = texcor;
                 face.VertexNormal = normal;
+                face.DrawType = DrawType.TriangleTextureNormal;
+            }
+            else if (values.Length == 12)
+            {
+                Int4 vertex = new Int4(values[0] - 1, values[3] - 1, values[6] - 1, values[9] - 1);
+                Int4 texcor = new Int4(values[1] - 1, values[4] - 1, values[7] - 1, values[10] - 1);
+                Int4 normal = new Int4(values[2] - 1, values[5] - 1, values[8] - 1, values[11] - 1);
+                face.Vertex = vertex;
+                face.VertexTexture = texcor;
+                face.VertexNormal = normal;
+                face.DrawType = DrawType.QuadTextureNormal;
+            }
+            else
+            {
+                throw new Exception("FUCKED");
             }
             workingObject.Faces.Add(face);
         }
 
-        private void AddVertex(ObjModelPart workingObject, string value)
+        private void AddVertex(Model workingObject, string value)
         {
             var values = ParseFloatsFromString(value);
             Vec3 vertex = new Vec3(values[0], values[1], values[2]);
             workingObject.Vertexs.Add(vertex);
         }
-        private void AddVertexTexture(ObjModelPart workingObject, string value)
+        private void AddVertexTexture(Model workingObject, string value)
         {
             var values = ParseFloatsFromString(value);
             if (values.Length == 2)
@@ -147,26 +182,26 @@ namespace LemonEngine.RenderLogic.ModelLoader
             }
 
         }
-        private void AddVertexNormal(ObjModelPart workingObject, string value)
+        private void AddVertexNormal(Model workingObject, string value)
         {
             var values = ParseFloatsFromString(value);
             Vec3 vertex = new Vec3(values[0], values[1], values[2]);
             workingObject.Vertexs.Add(vertex);
         }
 
-        private void SetWorkingMaterial(ObjModelPart workingObject, string value)
+        private void SetWorkingMaterial(ModelPart workingObject, string value)
         {
             workingObject.MaterialName = value;
         }
 
-        private void SetMaterialGroupName(ObjModel model, string value)
+        private void SetMaterialGroupName(Model model, string value)
         {
             model.MaterialGroup = value.Substring(0, value.IndexOf(".mtl", StringComparison.Ordinal));
         }
 
-        private ObjModelPart SetWorkingObject(ObjModel model, string name)
+        private ModelPart SetWorkingObject(Model model, string name)
         {
-            ObjModelPart part = new ObjModelPart();
+            ModelPart part = new ModelPart();
             part.Name = name;
             model.Parts.Add(part);
             return part;
@@ -174,11 +209,22 @@ namespace LemonEngine.RenderLogic.ModelLoader
 
         private float[] ParseFloatsFromString(string value)
         {
+            value = value.Replace(".",",");
             string[] values = value.Split(new char[] { ' ', '/'});
             float[] result = new float[values.Length];
             for (int index = 0; index < values.Length; index++)
             {
                 result[index] = float.Parse(values[index]);
+            }
+            return result;
+        }
+        private int[] ParseIntsFromString(string value)
+        {
+            string[] values = value.Split(new char[] { ' ', '/' });
+            int[] result = new int[values.Length];
+            for (int index = 0; index < values.Length; index++)
+            {
+                result[index] = int.Parse(values[index]);
             }
             return result;
         }

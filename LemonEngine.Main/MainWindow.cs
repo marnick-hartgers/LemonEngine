@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms;
+using LemonEngine.Infrastructure.Render.Renderable;
 using LemonEngine.RenderLogic;
 using SharpGL;
 
@@ -14,14 +15,16 @@ namespace LemonEngine.Main
 
         private RenderEnigne _renderEngine;
 
+        private IRenderable testDing;
+
         public MainWindow()
         {
             //InitializeComponent();
 
             _renderEngine = new RenderEnigne();
-
+            InitializeComponent();
             InitOpenGl();
-
+            
             
         }
 
@@ -59,7 +62,13 @@ namespace LemonEngine.Main
 
         private void openGLControl_OpenGLInitialized(object sender, EventArgs e)
         {
-            _renderEngine.StartLoad();
+            _renderEngine.StartLoad(openGLControl.OpenGL);
+            testDing = _renderEngine.AddRenderable("kerk", "");
+            //testDing = _renderEngine.AddRenderable("low-poly-mill", "");
+
+            
+
+
         }
 
         private void openGLControl_Resized(object sender, EventArgs e)
@@ -70,6 +79,21 @@ namespace LemonEngine.Main
         private void openGLControl_OpenGLDraw(object sender, RenderEventArgs args)
         {
             _renderEngine.Render(openGLControl.OpenGL);
+        }
+
+        private void trackBar1_Scroll(object sender, EventArgs e)
+        {
+            testDing.Position.X = (float) trackBar1.Value/100;
+        }
+
+        private void trackBar2_Scroll(object sender, EventArgs e)
+        {
+            testDing.Position.Y = (float)trackBar2.Value / 100;
+        }
+
+        private void trackBar3_Scroll(object sender, EventArgs e)
+        {
+            testDing.Rotation.Z = (float)trackBar3.Value / 100;
         }
     }
 }

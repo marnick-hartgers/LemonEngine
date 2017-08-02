@@ -49,9 +49,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ModelLoader\ObjFileReader.cs" />
-    <Compile Include="ModelLoader\ObjModel.cs" />
-    <Compile Include="ModelLoader\ObjModelPart.cs" />
-    <Compile Include="ModelLoader\ObjModelPartFace.cs" />
+    <Compile Include="Renderables\Model\Model.cs" />
+    <Compile Include="Renderables\Model\ModelPart.cs" />
+    <Compile Include="Renderables\Model\ModelPartFace.cs" />
     <Compile Include="Renderables\Model\ModelRepository.cs" />
     <Compile Include="Renderables\Renderable.cs" />
     <Compile Include="RenderEnigne.cs" />

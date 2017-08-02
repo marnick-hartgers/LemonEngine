@@ -2,8 +2,9 @@
 
 namespace LemonEngine.Infrastructure.Render.Renderable.Model
 {
-    public interface IMaterial
+    public interface IMaterialGroup
     {
         string Name { get; }
+        IMaterial[] Materials { get; }
     }
 }

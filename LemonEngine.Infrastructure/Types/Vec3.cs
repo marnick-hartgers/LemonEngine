@@ -8,49 +8,47 @@ namespace LemonEngine.Infrastructure.Types
 {
     public class Vec3
     {
-        private float _x, _y, _z;
+        private float[] _values;
 
         public Vec3()
         {
-
+            _values = new [] {0.0f,0.0f,0.0f};
         }
         public Vec3(float x,float y,float z)
         {
-            _x = x;
-            _y = y;
-            _z = z;
+            _values = new[] { x,y, z };
         }
 
         public float X{
             get {
-                return _x;
+                return _values[0];
             } set{
-                _x = value;
+                _values[0] = value;
             }
         }
         public float Y
         {
             get
             {
-                return _y;
+                return _values[1];
             }
             set
             {
-                _y = value;
+                _values[1] = value;
             }
         }
         public float Z
         {
             get
             {
-                return _z;
+                return _values[2];
             }
             set
             {
-                _z = value;
+                _values[2] = value;
             }
         }
 
-
+        public float[] AsArray => _values;
     }
 }

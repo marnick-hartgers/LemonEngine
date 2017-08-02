@@ -12,15 +12,24 @@ namespace LemonEngine.RenderLogic.Renderables.Model
     {
         private ObjFileReader modelReader = new ObjFileReader();
 
+        private Model[] models = null;
+
+        private static ModelRepository _singleton;
+
+        public static ModelRepository GetInstance()
+        {
+            return _singleton ?? (_singleton = new ModelRepository());
+        }
+
         public void StartLoad()
         {
             var res = modelReader.ReadFolder();
-
+            models = res.ToArray();
         }
 
         public IModel GetModelByName(string name)
         {
-            return null;
+            return models.First((m) => (m.Name == name));
         }
     }
 }
