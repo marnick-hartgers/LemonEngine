@@ -4,7 +4,9 @@ using System.Drawing;
 using System.Windows.Forms;
 using LemonEngine.Infrastructure.Render.Renderable;
 using LemonEngine.RenderLogic;
+using LemonEngine.RenderLogic.Light;
 using SharpGL;
+using SharpGL.Version;
 
 
 namespace LemonEngine.Main
@@ -42,8 +44,9 @@ namespace LemonEngine.Main
             openGLControl.Location = new Point(0, 0);
             openGLControl.Name = "openGLControl";
             openGLControl.RenderContextType = RenderContextType.NativeWindow;
-            openGLControl.Size = new Size(624, 391);
+            openGLControl.Size = new Size(800, 600);
             openGLControl.TabIndex = 0;
+            //openGLControl.OpenGLVersion = OpenGLVersion.OpenGL3_0;
             openGLControl.OpenGLInitialized += openGLControl_OpenGLInitialized;
             openGLControl.OpenGLDraw += openGLControl_OpenGLDraw;
             openGLControl.Resized += openGLControl_Resized;
@@ -63,11 +66,18 @@ namespace LemonEngine.Main
         private void openGLControl_OpenGLInitialized(object sender, EventArgs e)
         {
             _renderEngine.StartLoad(openGLControl.OpenGL);
-            testDing = _renderEngine.AddRenderable("kerk", "");
-            //testDing = _renderEngine.AddRenderable("low-poly-mill", "");
+            //testDing = _renderEngine.AddRenderable("RmhDktMako", "");
 
-            
+            testDing = _renderEngine.AddRenderable("low-poly-land", "");
 
+            var l = new Light(0);
+            l.Position.X = 1;
+            l.Position.Y = 1;
+            l.Position.Z = 1;
+            l.Init(openGLControl.OpenGL);
+
+
+            _renderEngine.AddLight(l);
 
         }
 
@@ -83,17 +93,17 @@ namespace LemonEngine.Main
 
         private void trackBar1_Scroll(object sender, EventArgs e)
         {
-            testDing.Position.X = (float) trackBar1.Value/100;
+            testDing.Rotation.X = (float) trackBar1.Value/50;
         }
 
         private void trackBar2_Scroll(object sender, EventArgs e)
         {
-            testDing.Position.Y = (float)trackBar2.Value / 100;
+            testDing.Rotation.Y = (float)trackBar2.Value / 50;
         }
 
         private void trackBar3_Scroll(object sender, EventArgs e)
         {
-            testDing.Rotation.Z = (float)trackBar3.Value / 100;
+            testDing.Rotation.Z = (float)trackBar3.Value / 50;
         }
     }
 }

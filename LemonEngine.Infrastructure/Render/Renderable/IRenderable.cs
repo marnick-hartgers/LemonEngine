@@ -9,7 +9,7 @@ namespace LemonEngine.Infrastructure.Render.Renderable
     {
         void InitEntity(OpenGL gl);
         void DrawEntity(OpenGL gl);
-        IMaterial Material { get; }
+        IMaterialGroup MaterialGroup { get; }
         IModel Model { get; }
         Vec3 Position { get; }
         Vec3 Rotation { get; }

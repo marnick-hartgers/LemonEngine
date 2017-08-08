@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using LemonEngine.Infrastructure.Render.Renderable.Model;
 using LemonEngine.Infrastructure.Types;
 using SharpGL;
@@ -28,126 +27,77 @@ namespace LemonEngine.RenderLogic.Renderables.Model
             VertexsNormal = new List<Vec3>();
         }
 
+        private int numVertexes = 0;
+        private int _partIndex = 0;
+        private IModelPartFace _currentFace = null;
 
-        public void DrawPart(IModelPart part, OpenGL gl)
+        public void DrawPart(IModelPart part, IMaterialGroup materialGroup, OpenGL gl)
         {
-            var firstface = part.Faces.FirstOrDefault();
-            if (firstface == null)
-            {
-                return;
-            }
-            var type = firstface.DrawType;
-            if (type == DrawType.Triangle || type == DrawType.TriangleTexture || type == DrawType.TriangleTextureNormal)
-            {
-                DrawWithTriangles(part, gl);
-            }
-            else
-            {
-                DrawWithQuads(part, gl);
-            }
-        }
-
-
-        private void DrawWithTriangles(IModelPart part, OpenGL gl)
-        {
-            gl.Begin(BeginMode.Triangles);
             
-            for (int d = 0; d < part.Faces.Count; d++)
+            for ( _partIndex = 0; _partIndex < part.Faces.Count; _partIndex++)
             {
-                gl.Color((float)d * d % 255 / 255, 0, 255f -(float)d * d % 255 / 255);
-
-                if (part.Faces[d].DrawType == DrawType.TriangleTexture)
-                {
-                    gl.Vertex(Vertexs[part.Faces[d].Vertex.One].AsArray);
-                    gl.TexCoord(Vertexs[part.Faces[d].VertexTexture.One].AsArray);
-
-                    gl.Vertex(Vertexs[part.Faces[d].Vertex.Two].AsArray);
-                    gl.TexCoord(Vertexs[part.Faces[d].VertexTexture.Two].AsArray);
-
-                    gl.Vertex(Vertexs[part.Faces[d].Vertex.Three].AsArray);
-                    gl.TexCoord(Vertexs[part.Faces[d].VertexTexture.Three].AsArray);
-                }
-                else if (part.Faces[d].DrawType == DrawType.TriangleTextureNormal)
-                {
-                    gl.Vertex(Vertexs[part.Faces[d].Vertex.One].AsArray);
-                    gl.TexCoord(Vertexs[part.Faces[d].VertexTexture.One].AsArray);
-                    gl.Normal(Vertexs[part.Faces[d].VertexNormal.One].AsArray);
-
-                    gl.Vertex(Vertexs[part.Faces[d].Vertex.Two].AsArray);
-                    gl.TexCoord(Vertexs[part.Faces[d].VertexTexture.Two].AsArray);
-                    gl.Normal(Vertexs[part.Faces[d].VertexNormal.Two].AsArray);
-
-                    gl.Vertex(Vertexs[part.Faces[d].Vertex.Three].AsArray);
-                    gl.TexCoord(Vertexs[part.Faces[d].VertexTexture.Three].AsArray);
-                    gl.Normal(Vertexs[part.Faces[d].VertexNormal.Three].AsArray);
-                }
-                else
-                {
-                    gl.Vertex(Vertexs[part.Faces[d].Vertex.One].AsArray);
-
-                    gl.Vertex(Vertexs[part.Faces[d].Vertex.Two].AsArray);
-
-                    gl.Vertex(Vertexs[part.Faces[d].Vertex.Three].AsArray);
-                }
-
+                _currentFace = part.Faces[_partIndex];
+                SetMaterial(gl, _currentFace.Material);
+                numVertexes = _currentFace.Vertex.Length;
+                SetBeginMode(gl, numVertexes);
+                Draw(_currentFace, gl);
+                gl.End();
+                UnsetMaterial(gl, _currentFace.Material);
             }
-            gl.End();
         }
 
-        private void DrawWithQuads(IModelPart part, OpenGL gl)
+        private void SetBeginMode(OpenGL gl, int numVertexes)
         {
-            return;//not supported
-            gl.Begin(BeginMode.Quads);
-            for (int d = 0; d < part.Faces.Count; d++)
+            switch (numVertexes)
             {
+                case 1:
+                    gl.Begin(BeginMode.Points);
+                    break;
+                case 2:
+                    gl.Begin(BeginMode.Lines);
+                    break;
+                case 3:
+                    gl.Begin(BeginMode.Triangles);
+                    break;
+                case 4:
+                    gl.Begin(BeginMode.Quads);
+                    break;
+                default:
+                    throw new IndexOutOfRangeException("No polygons please");
+                    break;
 
+            }
+        }
 
-                if (part.Faces[d].DrawType == DrawType.QuadTexture)
+        private void SetMaterial(OpenGL gl, IMaterial material)
+        {
+            material.Set(gl);
+        }
+
+        private void UnsetMaterial(OpenGL gl, IMaterial material)
+        {
+            material.Unset(gl);
+        }
+
+        private int _drawIndex = 0;
+        private void Draw(IModelPartFace part, OpenGL gl)
+        {
+            for (_drawIndex = 0; _drawIndex < part.Vertex.Length; _drawIndex++)
+            {
+                gl.Vertex(Vertexs[part.Vertex[_drawIndex]].AsArray);
+                if (part.HasVertexTexture)
                 {
-                    gl.Vertex(Vertexs[part.Faces[d].Vertex.One].AsArray);
-                    gl.TexCoord(Vertexs[part.Faces[d].VertexTexture.One].AsArray);
-
-                    gl.Vertex(Vertexs[part.Faces[d].Vertex.Two].AsArray);
-                    gl.TexCoord(Vertexs[part.Faces[d].VertexTexture.Two].AsArray);
-
-                    gl.Vertex(Vertexs[part.Faces[d].Vertex.Three].AsArray);
-                    gl.TexCoord(Vertexs[part.Faces[d].VertexTexture.Three].AsArray);
-
-                    gl.Vertex(Vertexs[part.Faces[d].Vertex.Four].AsArray);
-                    gl.TexCoord(Vertexs[part.Faces[d].VertexTexture.Four].AsArray);
+                    gl.TexCoord(VertexsTextures[part.VertexTexture[_drawIndex]].AsArray);
                 }
-                else if (part.Faces[d].DrawType == DrawType.QuadTextureNormal)
+                if (part.HasVertexNormal)
                 {
-                    gl.Vertex(Vertexs[part.Faces[d].Vertex.One].AsArray);
-                    gl.TexCoord(Vertexs[part.Faces[d].VertexTexture.One].AsArray);
-                    gl.Normal(Vertexs[part.Faces[d].VertexNormal.One].AsArray);
-
-                    gl.Vertex(Vertexs[part.Faces[d].Vertex.Two].AsArray);
-                    gl.TexCoord(Vertexs[part.Faces[d].VertexTexture.Two].AsArray);
-                    gl.Normal(Vertexs[part.Faces[d].VertexNormal.Two].AsArray);
-
-                    gl.Vertex(Vertexs[part.Faces[d].Vertex.Three].AsArray);
-                    gl.TexCoord(Vertexs[part.Faces[d].VertexTexture.Three].AsArray);
-                    gl.Normal(Vertexs[part.Faces[d].VertexNormal.Three].AsArray);
-
-                    gl.Vertex(Vertexs[part.Faces[d].Vertex.Four].AsArray);
-                    gl.TexCoord(Vertexs[part.Faces[d].VertexTexture.Four].AsArray);
-                    gl.Normal(Vertexs[part.Faces[d].VertexNormal.Four].AsArray);
-                }
-                else
-                {
-                    gl.Vertex(Vertexs[part.Faces[d].Vertex.One].AsArray);
-
-                    gl.Vertex(Vertexs[part.Faces[d].Vertex.Two].AsArray);
-
-                    gl.Vertex(Vertexs[part.Faces[d].Vertex.Three].AsArray);
-
-                    gl.Vertex(Vertexs[part.Faces[d].Vertex.Four].AsArray);
+                    gl.Normal(VertexsNormal[part.VertexNormal[_drawIndex]].AsArray);
                 }
 
             }
-            gl.End();
+
         }
+
 
     }
 }

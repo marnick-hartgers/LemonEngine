@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace LemonEngine.Infrastructure.Types.Render
+﻿namespace LemonEngine.Infrastructure.Types.Render
 {
     public class Verticle
     {

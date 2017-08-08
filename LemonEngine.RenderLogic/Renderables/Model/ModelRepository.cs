@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Linq;
 using LemonEngine.Infrastructure.Render.Renderable.Model;
 using LemonEngine.RenderLogic.ModelLoader;
 
@@ -21,9 +17,9 @@ namespace LemonEngine.RenderLogic.Renderables.Model
             return _singleton ?? (_singleton = new ModelRepository());
         }
 
-        public void StartLoad()
+        public void StartLoad( IMaterialRepository materialRepo)
         {
-            var res = modelReader.ReadFolder();
+            var res = modelReader.ReadFolder(materialRepo);
             models = res.ToArray();
         }
 

@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace LemonEngine.Infrastructure.Types
 {
@@ -12,17 +8,54 @@ namespace LemonEngine.Infrastructure.Types
 
         public Vec3()
         {
-            _values = new [] {0.0f,0.0f,0.0f};
+            _values = new[] { 0.0f, 0.0f, 0.0f };
         }
-        public Vec3(float x,float y,float z)
+        public Vec3(float x, float y, float z)
         {
-            _values = new[] { x,y, z };
+            _values = new[] { x, y, z };
         }
 
-        public float X{
-            get {
+        public Vec3 GetNormal()
+        {
+            float distance = (float)Math.Sqrt(X * X + Y * Y + Z * Z);
+            return new Vec3(X / distance, Y / distance, Z / distance);
+        }
+
+
+        public static Vec3 operator +(Vec3 a, Vec3 b)
+        {
+            return new Vec3(a.X + b.X,
+                a.Y + b.Y,
+                a.Z + b.Z);
+        }
+
+        public static Vec3 operator -(Vec3 a, Vec3 b)
+        {
+            return new Vec3(a.X - b.X,
+                            a.Y - b.Y,
+                            a.Z - b.Z);
+        }
+        public static Vec3 operator *(Vec3 a, Vec3 b)
+        {
+            return new Vec3(a.X * b.X,
+                            a.Y * b.Y,
+                            a.Z * b.Z);
+        }
+        public static Vec3 operator /(Vec3 a, Vec3 b)
+        {
+            return new Vec3(a.X / b.X,
+                            a.Y / b.Y,
+                            a.Z / b.Z);
+        }
+
+        public float X
+        {
+            get
+            {
                 return _values[0];
-            } set{
+            }
+            set
+            {
                 _values[0] = value;
             }
         }

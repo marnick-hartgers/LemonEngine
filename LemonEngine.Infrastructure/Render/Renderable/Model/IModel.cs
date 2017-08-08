@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using LemonEngine.Infrastructure.Types;
-using LemonEngine.Infrastructure.Types.Render;
 using SharpGL;
 
 namespace LemonEngine.Infrastructure.Render.Renderable.Model
@@ -17,6 +16,6 @@ namespace LemonEngine.Infrastructure.Render.Renderable.Model
         List<Vec3> VertexsTextures { get; }
         List<Vec3> VertexsNormal { get; }
 
-        void DrawPart(IModelPart part, OpenGL gl);
+        void DrawPart(IModelPart part, IMaterialGroup materialGroup, OpenGL gl);
     }
 }

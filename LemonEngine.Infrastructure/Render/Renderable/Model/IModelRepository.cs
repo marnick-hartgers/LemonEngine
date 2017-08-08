@@ -1,14 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace LemonEngine.Infrastructure.Render.Renderable.Model
+﻿namespace LemonEngine.Infrastructure.Render.Renderable.Model
 {
     public interface IModelRepository
     {
-        void StartLoad();
+        void StartLoad(IMaterialRepository materialRepo);
         IModel GetModelByName(string name);
     }
 }

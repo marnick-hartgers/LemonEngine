@@ -50,6 +50,7 @@
   <ItemGroup>
     <Compile Include="Logic\Entity\IMaintainable.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Render\Light\ILight.cs" />
     <Compile Include="Render\Renderable\IRenderService.cs" />
     <Compile Include="Render\Renderable\Model\IMaterialGroup.cs" />
     <Compile Include="Render\Renderable\Model\IModelPart.cs" />

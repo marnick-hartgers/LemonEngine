@@ -5,9 +5,11 @@ namespace LemonEngine.RenderLogic.Renderables.Model
 {
     public class ModelPartFace : IModelPartFace
     {
-        public Int4 Vertex { get; set; }
-        public Int4 VertexTexture { get; set; }
-        public Int4 VertexNormal { get; set; }
-        public DrawType DrawType { get; set; }
+        public int[] Vertex { get; set; }
+        public int[] VertexTexture { get; set; }
+        public int[] VertexNormal { get; set; }
+        public bool HasVertexTexture { get; set; }
+        public bool HasVertexNormal { get; set; }
+        public IMaterial Material { get; set; }
     }
 }

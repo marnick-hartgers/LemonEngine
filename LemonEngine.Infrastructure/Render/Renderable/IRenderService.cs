@@ -1,16 +1,14 @@
 ﻿using SharpGL;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using LemonEngine.Infrastructure.Render.Light;
 
 namespace LemonEngine.Infrastructure.Render.Renderable
 {
     public interface IRenderService
     {
-        void Init();
+        void Init(OpenGL gl);
         IRenderable AddRenderable(string model, string material);
         void Render(OpenGL gl);
+
+        void AddLight(ILight light);
     }
 }
