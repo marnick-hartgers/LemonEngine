@@ -39,7 +39,7 @@ namespace LemonEngine.RenderLogic.Renderables.Model
                 _currentFace = part.Faces[_partIndex];
                 SetMaterial(gl, _currentFace.Material);
                 numVertexes = _currentFace.Vertex.Length;
-                SetBeginMode(gl, numVertexes);
+                SetBeginMode(gl, _currentFace.Vertex.Length);
                 Draw(_currentFace, gl);
                 gl.End();
                 UnsetMaterial(gl, _currentFace.Material);
@@ -76,28 +76,52 @@ namespace LemonEngine.RenderLogic.Renderables.Model
 
         private void UnsetMaterial(OpenGL gl, IMaterial material)
         {
-            material.Unset(gl);
+            //material.Unset(gl);
         }
 
         private int _drawIndex = 0;
         private void Draw(IModelPartFace part, OpenGL gl)
         {
-            for (_drawIndex = 0; _drawIndex < part.Vertex.Length; _drawIndex++)
+            if (part.HasVertexNormal)
             {
-                gl.Vertex(Vertexs[part.Vertex[_drawIndex]].AsArray);
-                if (part.HasVertexTexture)
+                for (_drawIndex = 0; _drawIndex < part.Vertex.Length; _drawIndex++)
                 {
-                    gl.TexCoord(VertexsTextures[part.VertexTexture[_drawIndex]].AsArray);
-                }
-                if (part.HasVertexNormal)
-                {
+                    gl.Vertex(Vertexs[part.Vertex[_drawIndex]].AsArray);
                     gl.Normal(VertexsNormal[part.VertexNormal[_drawIndex]].AsArray);
-                }
 
+
+                }
             }
+            else
+            {
+                for (_drawIndex = 0; _drawIndex < part.Vertex.Length; _drawIndex++)
+                {
+                    gl.Vertex(Vertexs[part.Vertex[_drawIndex]].AsArray);
+                    //gl.Normal(VertexsNormal[part.VertexNormal[_drawIndex]].AsArray);
+
+
+                }
+            }
+            //for (_drawIndex = 0; _drawIndex < part.Vertex.Length; _drawIndex++)
+            //{
+            //    gl.Vertex(Vertexs[part.Vertex[_drawIndex]].AsArray);
+            //    if (part.HasVertexTexture)
+            //    {
+            //        gl.TexCoord(VertexsTextures[part.VertexTexture[_drawIndex]].AsArray);
+            //    }
+            //    if (part.HasVertexNormal)
+            //    {
+            //        gl.Normal(VertexsNormal[part.VertexNormal[_drawIndex]].AsArray);
+            //    }
+
+            //}
 
         }
 
 
+        public void finilize()
+        {
+            
+        }
     }
 }

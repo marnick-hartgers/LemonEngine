@@ -99,7 +99,7 @@ namespace LemonEngine.RenderLogic.ModelLoader
                     }
                 }
             }
-
+            model.finilize();
             return model;
         }
 
