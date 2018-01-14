@@ -50,10 +50,11 @@ namespace LemonEngine.RenderLogic.ModelLoader
         private Model ReadFile(string filename, IMaterialRepository materialRepo)
         {
             var fileStream = new StreamReader(filename);
-            Model model = new Model();
+            ObjModel model = new ObjModel();
             model.Name = Path.GetFileNameWithoutExtension(filename);
             string line = "";
-            ModelPart workingObject = null;
+            string currentName = "";
+            ObjModelPart workingObject = null;
             IMaterialGroup workingMaterialGroup = null;
             IMaterial workingMaterial = null;
             while ((line = fileStream.ReadLine()) != null)
@@ -69,14 +70,15 @@ namespace LemonEngine.RenderLogic.ModelLoader
                     switch (command.ToUpper())
                     {
                         case "O":
-                            workingObject = SetWorkingObject(model, value);
+                            currentName = value;
                             break;
                         case "MTLLIB":
                             SetMaterialGroupName(out workingMaterialGroup, model, materialRepo, value);
-
                             break;
                         case "USEMTL":
                             SetWorkingMaterial(out workingMaterial, workingMaterialGroup, value);
+                            workingObject = SetWorkingObject(model, $"{currentName}@{workingMaterial.Name}");
+                            workingObject.Material = workingMaterial;
                             break;
                         case "V":
                             AddVertex(model, value);
@@ -99,30 +101,28 @@ namespace LemonEngine.RenderLogic.ModelLoader
                     }
                 }
             }
-            model.finilize();
-            return model;
+            return model.ToModel();
         }
 
-        private void AddFace(ModelPart workingObject, IMaterial workingMaterial, string value)
+        private void AddFace(ObjModelPart workingObject, IMaterial workingMaterial, string value)
         {
-            ModelPartFace face = new ModelPartFace();
-            face.Material = workingMaterial;
             var valueGroups = value.Split(' ');
             List<int> vertexes = new List<int>();
-            List<int> texcords = new List<int>();
-            List<int> normals  = new List<int>();
+            List<int> normals = new List<int>();
+            List<int> texCords = new List<int>();
             foreach (var valueGroup in valueGroups)
             {
                 var valueByType = valueGroup.Split('/');
                 vertexes.Add(ParseIntsFromString(valueByType[0]) - 1);
                 if (valueByType.Length == 2)
                 {
-                    texcords.Add(ParseIntsFromString(valueByType[1]) - 1);
-                }else if (valueByType.Length == 3)
+                    texCords.Add(ParseIntsFromString(valueByType[1]) - 1);
+                }
+                else if (valueByType.Length == 3)
                 {
                     if (!string.IsNullOrEmpty(valueByType[1]))
                     {
-                        texcords.Add(ParseIntsFromString(valueByType[1]) - 1);
+                        texCords.Add(ParseIntsFromString(valueByType[1]) - 1);
                     }
                     if (!string.IsNullOrEmpty(valueByType[2]))
                     {
@@ -130,40 +130,64 @@ namespace LemonEngine.RenderLogic.ModelLoader
                     }
                 }
             }
-            face.Vertex = vertexes.ToArray();
-            face.VertexTexture = texcords.ToArray();
-            face.VertexNormal = normals.ToArray();
-            face.HasVertexTexture = texcords.Count == vertexes.Count;
-            face.HasVertexNormal = normals.Count == vertexes.Count;
-            workingObject.Faces.Add(face);
+            if (vertexes.Count == 3)
+            {
+                workingObject.FaceVertexes.AddRange(vertexes);
+                workingObject.FaceNormals.AddRange(normals);
+                workingObject.FaceTextCords.AddRange(texCords);
+            }
+            else if (vertexes.Count == 4)
+            {
+                //Triangulate
+                workingObject.FaceVertexes.Add(vertexes[0]);
+                workingObject.FaceVertexes.Add(vertexes[1]);
+                workingObject.FaceVertexes.Add(vertexes[2]);
+
+                workingObject.FaceVertexes.Add(vertexes[2]);
+                workingObject.FaceVertexes.Add(vertexes[3]);
+                workingObject.FaceVertexes.Add(vertexes[0]);
+
+                workingObject.FaceNormals.Add(normals[0]);
+                workingObject.FaceNormals.Add(normals[1]);
+                workingObject.FaceNormals.Add(normals[2]);
+
+                workingObject.FaceNormals.Add(normals[2]);
+                workingObject.FaceNormals.Add(normals[3]);
+                workingObject.FaceNormals.Add(normals[0]);
+            }
+            else
+            {
+                throw new Exception("Not supported yet");
+            }
+            
         }
 
-        private void AddVertex(Model workingObject, string value)
+        private void AddVertex(ObjModel workingObject, string value)
         {
             var values = ParseFloatsFromString(value);
             Vec3 vertex = new Vec3(values[0], values[1], values[2]);
             workingObject.Vertexs.Add(vertex);
         }
-        private void AddVertexTexture(Model workingObject, string value)
+        private void AddVertexTexture(ObjModel workingObject, string value)
         {
             var values = ParseFloatsFromString(value);
             if (values.Length == 2)
             {
                 Vec3 vertex = new Vec3(values[0], values[1], 0);
-                workingObject.VertexsTextures.Add(vertex);
+                workingObject.TextCords.Add(vertex);
             }
             else if (values.Length == 3)
             {
                 Vec3 vertex = new Vec3(values[0], values[1], values[2]);
-                workingObject.VertexsTextures.Add(vertex);
+                workingObject.TextCords.Add(vertex);
             }
 
         }
-        private void AddVertexNormal(Model workingObject, string value)
+        private void AddVertexNormal(ObjModel workingObject, string value)
         {
             var values = ParseFloatsFromString(value);
             Vec3 vertex = new Vec3(values[0], values[1], values[2]);
-            workingObject.VertexsNormal.Add(vertex);
+            workingObject.Normals.Add(vertex);
         }
 
         private void SetWorkingMaterial(out IMaterial workingMaterial, IMaterialGroup materialGroup, string value)
@@ -171,16 +195,17 @@ namespace LemonEngine.RenderLogic.ModelLoader
             workingMaterial = materialGroup.GetMaterialByName(value.Trim());
         }
 
-        private void SetMaterialGroupName(out IMaterialGroup workingMaterialGroup, Model model, IMaterialRepository materialRepo, string value)
+        private void SetMaterialGroupName(out IMaterialGroup workingMaterialGroup, ObjModel model, IMaterialRepository materialRepo, string value)
         {
-            model.MaterialGroup = value.Substring(0, value.IndexOf(".mtl", StringComparison.Ordinal));
-            workingMaterialGroup = materialRepo.GetMaterialGroup(model.MaterialGroup);
+            string materialGroup = value.Substring(0, value.IndexOf(".mtl", StringComparison.Ordinal));
+            model.MaterialGroup = materialGroup;
+            workingMaterialGroup = materialRepo.GetMaterialGroup(materialGroup);
         }
 
-        private ModelPart SetWorkingObject(Model model, string name)
+        private ObjModelPart SetWorkingObject(ObjModel model, string name)
         {
-            ModelPart part = new ModelPart();
-            part.Name = name;
+            ObjModelPart part = new ObjModelPart();
+            part.Name = $"{name}@";
             model.Parts.Add(part);
             return part;
         }

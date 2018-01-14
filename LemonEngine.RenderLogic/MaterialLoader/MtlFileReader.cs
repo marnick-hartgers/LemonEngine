@@ -174,10 +174,10 @@ namespace LemonEngine.RenderLogic.MaterialLoader
                 //m.Texture = _emptyTexture;
                 //m.HasTexture = true;
             }
-            m.Ambient = def.Ambient;
-            m.Color = def.Ambient;
-            m.Diffuse = def.Diffuse;
-            m.Specular = def.Specular;
+            m.AmbColor = def.Ambient;
+            m.Color = def.Diffuse;
+            m.DifColor = def.Diffuse;
+            m.SpeColor = def.Specular;
 
             materials.Add(m);
         }

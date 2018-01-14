@@ -30,6 +30,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="GlmNet, Version=0.5.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\GlmNet.0.5.1.0\lib\net40\GlmNet.dll</HintPath>
+    </Reference>
     <Reference Include="SharpGL, Version=2.4.0.0, Culture=neutral, PublicKeyToken=27fc851303210b27, processorArchitecture=MSIL">
       <HintPath>..\packages\SharpGL.2.4.0.0\lib\net40\SharpGL.dll</HintPath>
       <Private>True</Private>
@@ -54,6 +57,8 @@
     <Compile Include="Light\Light.cs" />
     <Compile Include="MaterialLoader\MtlFileReader.cs" />
     <Compile Include="ModelLoader\ObjFileReader.cs" />
+    <Compile Include="ModelLoader\ObjModelPart.cs" />
+    <Compile Include="ModelLoader\ObjModel.cs" />
     <Compile Include="Renderables\Material\Material.cs" />
     <Compile Include="Renderables\Material\MaterialGroup.cs" />
     <Compile Include="Renderables\Material\MaterialRepository.cs" />
@@ -71,6 +76,8 @@
     <Compile Include="RenderTools.Designer.cs">
       <DependentUpon>RenderTools.cs</DependentUpon>
     </Compile>
+    <Compile Include="Events\ResizedEventEventArgs.cs" />
+    <Compile Include="Shaders\DefaultShader.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

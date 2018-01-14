@@ -110,12 +110,13 @@ namespace WallpaperGrabber
             //testDing = _renderEngine.AddRenderable("RmhDktMako", "");
 
             testDing = _renderEngine.AddRenderable("low-poly-mill", "");
-            //testDing = _renderEngine.AddRenderable("lp", "");
+            testDing.Position.Z = -0.3f;
+            //testDing = _renderEngine.AddRenderable("giftbox", "");
 
             var l = new Light(0);
-            l.Position.X = -1;
-            l.Position.Y = -1;
-            l.Position.Z = 1;
+            l.Position.X = -1f;
+            l.Position.Y = -1f;
+            l.Position.Z = 0.5f;
             l.Init(openGLControl.OpenGL);
             
 

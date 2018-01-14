@@ -18,7 +18,7 @@ namespace LemonEngine.RenderLogic.Light
 
         public void Init(OpenGL gl)
         {
-            gl.Enable(OpenGL.GL_LIGHT0);
+            //gl.Enable(OpenGL.GL_LIGHT0);
         }
 
         public void Draw(OpenGL gl)
@@ -32,18 +32,19 @@ namespace LemonEngine.RenderLogic.Light
 
         private void Setlight(OpenGL gl)
         {
+            return;
             gl.MatrixMode(MatrixMode.Projection);
             
             gl.PushMatrix();
             gl.LoadIdentity();
             
-            gl.Light(LightName.Light0, LightParameter.Position, new float[] { -1f, -1f, 1f, 0f });
-            //gl.Light(LightName.Light0, LightParameter.Ambient, new float[] { 0.01f, 0.01f, 0.01f, 0f });
+            gl.Light(LightName.Light0, LightParameter.Position, new float[] { -3f, -0f, 10f, 1f });
+            gl.Light(LightName.Light0, LightParameter.Ambient, new float[] { 0.1f, 0.1f, 0.1f });
             gl.Light(LightName.Light0, LightParameter.Diffuse, new float[] { 1f, 1f, 1f, 1f });
             gl.Light(LightName.Light0, LightParameter.Specular, new float[] { 1f, 1f, 1f, 1f });
-            //gl.Light(LightName.Light0, LightParameter.SpotCutoff, 180.0f);
+            gl.Light(LightName.Light0, LightParameter.SpotCutoff, 180.0f);
             gl.PopMatrix();
-           
+            gl.MatrixMode(MatrixMode.Modelview);
         }
 
         public Vec3 Position { get; }

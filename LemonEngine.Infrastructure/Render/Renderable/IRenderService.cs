@@ -8,7 +8,5 @@ namespace LemonEngine.Infrastructure.Render.Renderable
         void Init(OpenGL gl);
         IRenderable AddRenderable(string model, string material);
         void Render(OpenGL gl);
-
-        void AddLight(ILight light);
     }
 }

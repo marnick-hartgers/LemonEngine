@@ -1,6 +1,7 @@
 ﻿using System;
 using LemonEngine.Infrastructure.Render.Light;
 using LemonEngine.Infrastructure.Render.Renderable;
+using LemonEngine.RenderLogic.Events;
 using SharpGL;
 using SharpGL.Enumerations;
 
@@ -10,60 +11,31 @@ namespace LemonEngine.RenderLogic
     public class RenderEnigne
     {
         public EventHandler OnLoadDone;
+        public EventHandler<ResizedEventArgs> OnResized;
 
         private RenderService _renderService;
-
-        private RenderTools _renderTools;
 
         private RenderSettings _renderSettings;
         public void StartLoad(OpenGL gl)
         {
             _renderSettings = new RenderSettings();
-            
-            //gl.Enable(OpenGL.GL_BLEND);
+
+            gl.Enable(OpenGL.GL_BLEND);
+            gl.ShadeModel(OpenGL.GL_SMOOTH);
+
+            gl.Enable(OpenGL.GL_CULL_FACE);
+            gl.CullFace(OpenGL.GL_BACK);
+            gl.BlendFunc(OpenGL.GL_SRC_ALPHA, OpenGL.GL_ONE_MINUS_SRC_ALPHA);
+            gl.DepthFunc(OpenGL.GL_LEQUAL);
             gl.Enable(OpenGL.GL_DEPTH_TEST);
 
-            SetRenderSettings(gl);
-            //gl.BlendFunc(OpenGL.GL_SRC_ALPHA, OpenGL.GL_ONE_MINUS_SRC_ALPHA);
-            
-            gl.ClearColor(0.5f,0.7f,1f,0f);
             _renderService = new RenderService();
             _renderService.Init(gl);
 
 
-            _renderTools = new RenderTools();
-            _renderTools.LightChanged += SetLightChanged;
-            _renderTools.SmoothChanged += SetSmoothChanged;
-            _renderTools.ColorMaterialChanged += SetColorMaterialChanged;
-            _renderTools.TexturesChanged += SetTexturesChanged;
-            _renderTools.Show();
-
 
             SignalLoadDone();
 
-        }
-
-        private void SetColorMaterialChanged(object sender, ToggleEventArgs toggleEventArgs)
-        {
-            _renderSettings.UseColorMaterials = toggleEventArgs.State;
-            _renderSettings.HasPendingChanges = true;
-        }
-
-        private void SetSmoothChanged(object sender, ToggleEventArgs toggleEventArgs)
-        {
-            _renderSettings.UseSmooth = toggleEventArgs.State;
-            _renderSettings.HasPendingChanges = true;
-        }
-
-        private void SetLightChanged(object sender, ToggleEventArgs toggleEventArgs)
-        {
-            _renderSettings.UseLight = toggleEventArgs.State;
-            _renderSettings.HasPendingChanges = true;
-        }
-        private void SetTexturesChanged(object sender, ToggleEventArgs toggleEventArgs)
-        {
-            _renderSettings.UseTextures = toggleEventArgs.State;
-            _renderSettings.HasPendingChanges = true;
         }
 
         private void SignalLoadDone()
@@ -78,55 +50,18 @@ namespace LemonEngine.RenderLogic
 
         public void Render(OpenGL gl)
         {
-            if (_renderSettings.HasPendingChanges)
-            {
-                SetRenderSettings(gl);
-            }
             _renderService.Render(gl);
+            
         }
 
         public void AddLight(ILight light)
         {
-            _renderService.AddLight(light);
         }
+        
 
-        private void SetRenderSettings(OpenGL gl)
+        public void SetResolution(int x, int y)
         {
-            if (_renderSettings.UseLight)
-            {
-                gl.Enable(OpenGL.GL_LIGHTING);
-            }
-            else
-            {
-                gl.Disable(OpenGL.GL_LIGHTING);
-            }
-            if (_renderSettings.UseSmooth)
-            {
-                gl.ShadeModel(ShadeModel.Smooth);
-            }
-            else
-            {
-                gl.ShadeModel(ShadeModel.Flat);
-            }
-            if (_renderSettings.UseColorMaterials)
-            {
-                gl.Enable(OpenGL.GL_COLOR_MATERIAL);
-                gl.ColorMaterial(OpenGL.GL_FRONT_AND_BACK, OpenGL.GL_AMBIENT_AND_DIFFUSE);
-            }
-            else
-            {
-                gl.Disable(OpenGL.GL_COLOR_MATERIAL);
-            }
-            if (_renderSettings.UseTextures)
-            {
-                gl.Enable(OpenGL.GL_TEXTURE_2D);
-            }
-            else
-            {
-                gl.Disable(OpenGL.GL_TEXTURE_2D);
-            }
-
-            _renderSettings.HasPendingChanges = false;
+            OnResized?.Invoke(this, new ResizedEventArgs(x,y));
         }
     }
 

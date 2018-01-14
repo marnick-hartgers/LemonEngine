@@ -1,7 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using GlmNet;
+using LemonEngine.Infrastructure.Render.Camera;
 using LemonEngine.Infrastructure.Render.Renderable.Model;
+using LemonEngine.Infrastructure.Render.Shader;
 using LemonEngine.Infrastructure.Types;
+using LemonEngine.RenderLogic.Shaders;
 using SharpGL;
 using SharpGL.Enumerations;
 
@@ -10,63 +15,54 @@ namespace LemonEngine.RenderLogic.Renderables.Model
     public class Model : IModel
     {
         public string Name { get; set; }
-
         public string MaterialGroup { get; set; }
-
+        
         public List<IModelPart> Parts { get; }
+        private Vec3 _position;
+        private Vec3 _rotation;
+        private Vec3 _scale;
 
-        public List<Vec3> Vertexs { get; }
-        public List<Vec3> VertexsTextures { get; }
-        public List<Vec3> VertexsNormal { get; }
+        private IShader _shader;
+
+        private mat4 modelMatrix;
 
         public Model()
         {
             Parts = new List<IModelPart>();
-            Vertexs = new List<Vec3>();
-            VertexsTextures = new List<Vec3>();
-            VertexsNormal = new List<Vec3>();
+            _shader = new DefaultShader();
+
+            _position = new Vec3();
+            _rotation = new Vec3();
+            _scale = new Vec3();
+                modelMatrix = new mat4(1);
+
         }
+        
 
-        private int numVertexes = 0;
-        private int _partIndex = 0;
-        private IModelPartFace _currentFace = null;
-
-        public void DrawPart(IModelPart part, IMaterialGroup materialGroup, OpenGL gl)
+        public void Draw(OpenGL gl, ICamera camera)
         {
+            _shader.BindToGl(gl);
+            camera.SetCamera(gl, _shader);
+            _shader.ShaderProgram.SetUniformMatrix4(gl, "modelMatrix", modelMatrix.to_array());
+            Parts.Reverse();
             
-            for ( _partIndex = 0; _partIndex < part.Faces.Count; _partIndex++)
+            foreach (IModelPart part in Parts)
             {
-                _currentFace = part.Faces[_partIndex];
-                SetMaterial(gl, _currentFace.Material);
-                numVertexes = _currentFace.Vertex.Length;
-                SetBeginMode(gl, _currentFace.Vertex.Length);
-                Draw(_currentFace, gl);
-                gl.End();
-                UnsetMaterial(gl, _currentFace.Material);
+                part.BindForDraw(gl, _shader);
+                gl.DrawArrays(OpenGL.GL_TRIANGLES, 0, part.VertexCount);
+                part.UnbindForDraw(gl, _shader);
             }
+            _shader.UnbindToGl(gl);
         }
 
-        private void SetBeginMode(OpenGL gl, int numVertexes)
+        public void SetRotation(Vec3 rotation)
         {
-            switch (numVertexes)
-            {
-                case 1:
-                    gl.Begin(BeginMode.Points);
-                    break;
-                case 2:
-                    gl.Begin(BeginMode.Lines);
-                    break;
-                case 3:
-                    gl.Begin(BeginMode.Triangles);
-                    break;
-                case 4:
-                    gl.Begin(BeginMode.Quads);
-                    break;
-                default:
-                    throw new IndexOutOfRangeException("No polygons please");
-                    break;
-
-            }
+            modelMatrix = glm.rotate(modelMatrix, _rotation.X - rotation.X, new vec3(1, 0, 0));
+            modelMatrix = glm.rotate(modelMatrix, _rotation.Y - rotation.Y, new vec3(0, 1, 0));
+            modelMatrix = glm.rotate(modelMatrix, _rotation.Z - rotation.Z, new vec3(0, 0, 1));
+            _rotation.X = rotation.X;
+            _rotation.Y = rotation.Y;
+            _rotation.Z = rotation.Z;
         }
 
         private void SetMaterial(OpenGL gl, IMaterial material)
@@ -76,52 +72,16 @@ namespace LemonEngine.RenderLogic.Renderables.Model
 
         private void UnsetMaterial(OpenGL gl, IMaterial material)
         {
-            //material.Unset(gl);
+            material.Unset(gl);
         }
 
-        private int _drawIndex = 0;
-        private void Draw(IModelPartFace part, OpenGL gl)
+        public void BindToGl(OpenGL gl)
         {
-            if (part.HasVertexNormal)
+            _shader.Create(gl);
+            foreach (IModelPart part in Parts)
             {
-                for (_drawIndex = 0; _drawIndex < part.Vertex.Length; _drawIndex++)
-                {
-                    gl.Vertex(Vertexs[part.Vertex[_drawIndex]].AsArray);
-                    gl.Normal(VertexsNormal[part.VertexNormal[_drawIndex]].AsArray);
-
-
-                }
+                part.BindToGl(gl, _shader);
             }
-            else
-            {
-                for (_drawIndex = 0; _drawIndex < part.Vertex.Length; _drawIndex++)
-                {
-                    gl.Vertex(Vertexs[part.Vertex[_drawIndex]].AsArray);
-                    //gl.Normal(VertexsNormal[part.VertexNormal[_drawIndex]].AsArray);
-
-
-                }
-            }
-            //for (_drawIndex = 0; _drawIndex < part.Vertex.Length; _drawIndex++)
-            //{
-            //    gl.Vertex(Vertexs[part.Vertex[_drawIndex]].AsArray);
-            //    if (part.HasVertexTexture)
-            //    {
-            //        gl.TexCoord(VertexsTextures[part.VertexTexture[_drawIndex]].AsArray);
-            //    }
-            //    if (part.HasVertexNormal)
-            //    {
-            //        gl.Normal(VertexsNormal[part.VertexNormal[_drawIndex]].AsArray);
-            //    }
-
-            //}
-
-        }
-
-
-        public void finilize()
-        {
-            
         }
     }
 }

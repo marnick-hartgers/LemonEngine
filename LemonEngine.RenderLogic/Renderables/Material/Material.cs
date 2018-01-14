@@ -18,9 +18,9 @@ namespace LemonEngine.RenderLogic.Renderables.Material
 
         public Vec3 Color { get; set; }
 
-        public Vec3 Ambient { get; set; }
-        public Vec3 Diffuse { get; set; }
-        public Vec3 Specular { get; set; }
+        public Vec3 AmbColor { get; set; }
+        public Vec3 DifColor { get; set; }
+        public Vec3 SpeColor { get; set; }
         public float Illum { get; set; }
 
         private Texture _glTexture = null;
@@ -35,7 +35,7 @@ namespace LemonEngine.RenderLogic.Renderables.Material
             {
                 _glTexture = new Texture();
                 _glTexture.Create(gl, Texture);
-                
+                gl.GenerateMipmapEXT(OpenGL.GL_TEXTURE_2D);
             }
         }
 
@@ -45,13 +45,23 @@ namespace LemonEngine.RenderLogic.Renderables.Material
             if (HasTexture)
             {
                 gl.BindTexture(OpenGL.GL_TEXTURE_2D, _glTexture.TextureName);
+                gl.TexParameter(OpenGL.GL_TEXTURE_2D, OpenGL.GL_TEXTURE_WRAP_S, OpenGL.GL_REPEAT);
+                gl.TexParameter(OpenGL.GL_TEXTURE_2D, OpenGL.GL_TEXTURE_MIN_FILTER, OpenGL.GL_LINEAR);
+                gl.TexParameter(OpenGL.GL_TEXTURE_2D, OpenGL.GL_TEXTURE_MAG_FILTER, OpenGL.GL_LINEAR);
+                gl.Color(1.0f, 1.0f, 1.0f);
             }
-            gl.Color(Diffuse.AsArray);
+            else
+            {
+                gl.Color(DifColor.AsArray);
+                gl.Material(OpenGL.GL_FRONT_AND_BACK, OpenGL.GL_AMBIENT, DifColor.AsArray);
+                gl.Material(OpenGL.GL_FRONT_AND_BACK, OpenGL.GL_DIFFUSE, DifColor.AsArray);
+                gl.Material(OpenGL.GL_FRONT_AND_BACK, OpenGL.GL_SPECULAR, SpeColor.AsArray);
+                gl.Material(OpenGL.GL_FRONT_AND_BACK, OpenGL.GL_SHININESS, 90f);
+            }
+            
 
-            gl.Material(OpenGL.GL_FRONT_AND_BACK, OpenGL.GL_AMBIENT, Ambient.AsArray);
-            gl.Material(OpenGL.GL_FRONT_AND_BACK, OpenGL.GL_DIFFUSE, Diffuse.AsArray);
-            gl.Material(OpenGL.GL_FRONT_AND_BACK, OpenGL.GL_SPECULAR, Specular.AsArray);
-            gl.Material(OpenGL.GL_FRONT_AND_BACK, OpenGL.GL_SHININESS, 50f);
+            //gl.Material(OpenGL.GL_FRONT_AND_BACK, OpenGL.GL_AMBIENT, AmbColor.AsArray);
+            
         }
 
         public void Unset(OpenGL gl)

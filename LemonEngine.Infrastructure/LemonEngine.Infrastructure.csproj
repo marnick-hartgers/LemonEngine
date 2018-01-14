@@ -50,6 +50,7 @@
   <ItemGroup>
     <Compile Include="Logic\Entity\IMaintainable.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Render\Camera\ICamera.cs" />
     <Compile Include="Render\Light\ILight.cs" />
     <Compile Include="Render\Renderable\IRenderService.cs" />
     <Compile Include="Render\Renderable\Model\IMaterialGroup.cs" />
@@ -60,10 +61,12 @@
     <Compile Include="Render\Renderable\Model\IMaterial.cs" />
     <Compile Include="Render\Renderable\Model\IModel.cs" />
     <Compile Include="Render\Renderable\IRenderable.cs" />
+    <Compile Include="Render\Shader\IShader.cs" />
     <Compile Include="Types\Int4.cs" />
     <Compile Include="Types\Render\Polygon.cs" />
     <Compile Include="Types\Render\Verticle.cs" />
     <Compile Include="Types\Int3.cs" />
+    <Compile Include="Types\Vec2.cs" />
     <Compile Include="Types\Vec3.cs" />
   </ItemGroup>
   <ItemGroup>

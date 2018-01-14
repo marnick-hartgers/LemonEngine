@@ -40,13 +40,13 @@ namespace LemonEngine.Main
             // 
             openGLControl.Dock = DockStyle.Fill;
             openGLControl.DrawFPS = true;
-            openGLControl.FrameRate = 20;
+            openGLControl.FrameRate = 60;
             openGLControl.Location = new Point(0, 0);
             openGLControl.Name = "openGLControl";
             openGLControl.RenderContextType = RenderContextType.NativeWindow;
             openGLControl.Size = new Size(800, 600);
             openGLControl.TabIndex = 0;
-            //openGLControl.OpenGLVersion = OpenGLVersion.OpenGL3_0;
+            openGLControl.OpenGLVersion = OpenGLVersion.OpenGL4_4;
             openGLControl.OpenGLInitialized += openGLControl_OpenGLInitialized;
             openGLControl.OpenGLDraw += openGLControl_OpenGLDraw;
             openGLControl.Resized += openGLControl_Resized;
@@ -66,9 +66,8 @@ namespace LemonEngine.Main
         private void openGLControl_OpenGLInitialized(object sender, EventArgs e)
         {
             _renderEngine.StartLoad(openGLControl.OpenGL);
-            //testDing = _renderEngine.AddRenderable("RmhDktMako", "");
-
-            testDing = _renderEngine.AddRenderable("low-poly-land", "");
+            testDing = _renderEngine.AddRenderable("LP_001", "");
+            //testDing = _renderEngine.AddRenderable("low-poly-mill", "");
 
             var l = new Light(0);
             l.Position.X = 1;
@@ -76,7 +75,7 @@ namespace LemonEngine.Main
             l.Position.Z = 1;
             l.Init(openGLControl.OpenGL);
 
-
+            
             _renderEngine.AddLight(l);
 
         }
