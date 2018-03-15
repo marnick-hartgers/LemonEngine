@@ -81,7 +81,7 @@ namespace WallpaperGrabber
             // 
             openGLControl.Dock = DockStyle.Fill;
             openGLControl.DrawFPS = true;
-            openGLControl.FrameRate = 20;
+            openGLControl.FrameRate = 60;
             openGLControl.Location = new Point(0, 0);
             openGLControl.Name = "openGLControl";
             openGLControl.RenderContextType = RenderContextType.NativeWindow;
@@ -107,10 +107,11 @@ namespace WallpaperGrabber
         private void openGLControl_OpenGLInitialized(object sender, EventArgs e)
         {
             _renderEngine.StartLoad(openGLControl.OpenGL);
-            //testDing = _renderEngine.AddRenderable("RmhDktMako", "");
+            testDing = _renderEngine.AddRenderable("LP_001", "");
 
-            testDing = _renderEngine.AddRenderable("low-poly-mill", "");
-            testDing.Position.Z = -0.3f;
+            //testDing = _renderEngine.AddRenderable("low-poly-mill", "");
+            testDing.Rotation.X = (float)Math.PI / -15.0f;
+            testDing.Position.Z = -5.0f;
             //testDing = _renderEngine.AddRenderable("giftbox", "");
 
             var l = new Light(0);
@@ -131,7 +132,7 @@ namespace WallpaperGrabber
 
         private void openGLControl_OpenGLDraw(object sender, RenderEventArgs args)
         {
-            testDing.Rotation.Z =(DateTime.Now.Second + DateTime.Now.Millisecond / 1000f) / 60f * 360f;
+            testDing.Rotation.Y =(DateTime.Now.Second + DateTime.Now.Millisecond / 1000f) / 60f * ((float)Math.PI * 2.0f);
             _renderEngine.Render(openGLControl.OpenGL);
         }
 

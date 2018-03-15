@@ -72,19 +72,23 @@ namespace LemonEngine.RenderLogic.ModelLoader
                     normalData.Add(normal.Y);
                     normalData.Add(normal.Z);
                 }
-                
 
-                if (TextCords.Count == Vertexs.Count)
+
+                if (i < part.FaceTextCords.Count)
                 {
                     var textCord = TextCords[part.FaceTextCords[i]];
                     textCordData.Add(textCord.X);
                     textCordData.Add(textCord.Y);
-                    textCordData.Add(textCord.Z);
+                }
+                else
+                {
+                    textCordData.Add(0);
+                    textCordData.Add(0);
                 }
                 
 
             }
-            return new ModelPart(part.Name, part.Material, vertexData.ToArray(), amColorData.ToArray(), defColorData.ToArray(), secColorData.ToArray(), normalData.ToArray());
+            return new ModelPart(part.Name, part.Material, vertexData.ToArray(), amColorData.ToArray(), defColorData.ToArray(), secColorData.ToArray(), normalData.ToArray(), textCordData.ToArray());
         }
     }
 }

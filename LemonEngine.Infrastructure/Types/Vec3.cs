@@ -82,6 +82,14 @@ namespace LemonEngine.Infrastructure.Types
             }
         }
 
+        public static void Copy(Vec3 original, Vec3 copy)
+        {
+            //copy = new Vec3(original.X, original.Y, original.Z);
+            copy.X = original.X;
+            copy.Y = original.Y;
+            copy.Z = original.Z;
+        }
+
         public float[] AsArray => _values;
     }
 }

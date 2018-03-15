@@ -13,6 +13,6 @@ namespace LemonEngine.Infrastructure.Render.Renderable.Model
         List<IModelPart> Parts { get; }
         void Draw(OpenGL gl, ICamera camera);
         void BindToGl(OpenGL gl);
-        void SetRotation(Vec3 rotation);
+        void SetParameters(Vec3 position, Vec3 rotation);
     }
 }

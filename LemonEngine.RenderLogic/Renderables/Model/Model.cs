@@ -8,7 +8,6 @@ using LemonEngine.Infrastructure.Render.Shader;
 using LemonEngine.Infrastructure.Types;
 using LemonEngine.RenderLogic.Shaders;
 using SharpGL;
-using SharpGL.Enumerations;
 
 namespace LemonEngine.RenderLogic.Renderables.Model
 {
@@ -18,24 +17,16 @@ namespace LemonEngine.RenderLogic.Renderables.Model
         public string MaterialGroup { get; set; }
         
         public List<IModelPart> Parts { get; }
-        private Vec3 _position;
-        private Vec3 _rotation;
-        private Vec3 _scale;
 
         private IShader _shader;
 
-        private mat4 modelMatrix;
+        private mat4 _modelMatrix;
 
         public Model()
         {
             Parts = new List<IModelPart>();
             _shader = new DefaultShader();
-
-            _position = new Vec3();
-            _rotation = new Vec3();
-            _scale = new Vec3();
-                modelMatrix = new mat4(1);
-
+            _modelMatrix = new mat4(1);
         }
         
 
@@ -43,8 +34,8 @@ namespace LemonEngine.RenderLogic.Renderables.Model
         {
             _shader.BindToGl(gl);
             camera.SetCamera(gl, _shader);
-            _shader.ShaderProgram.SetUniformMatrix4(gl, "modelMatrix", modelMatrix.to_array());
-            Parts.Reverse();
+            _shader.ShaderProgram.SetUniformMatrix4(gl, "modelMatrix", _modelMatrix.to_array());
+            //Parts.Reverse();
             
             foreach (IModelPart part in Parts)
             {
@@ -55,19 +46,29 @@ namespace LemonEngine.RenderLogic.Renderables.Model
             _shader.UnbindToGl(gl);
         }
 
-        public void SetRotation(Vec3 rotation)
+        public void SetParameters(Vec3 position, Vec3 rotation)
         {
-            modelMatrix = glm.rotate(modelMatrix, _rotation.X - rotation.X, new vec3(1, 0, 0));
-            modelMatrix = glm.rotate(modelMatrix, _rotation.Y - rotation.Y, new vec3(0, 1, 0));
-            modelMatrix = glm.rotate(modelMatrix, _rotation.Z - rotation.Z, new vec3(0, 0, 1));
-            _rotation.X = rotation.X;
-            _rotation.Y = rotation.Y;
-            _rotation.Z = rotation.Z;
+            _modelMatrix = new mat4(1);
+            SetPosition(position);
+            SetRotation(rotation);
+            
+        }
+
+        private void SetRotation(Vec3 rotation)
+        {
+            _modelMatrix = glm.rotate(_modelMatrix, rotation.X, new vec3(1, 0, 0));
+            _modelMatrix = glm.rotate(_modelMatrix, rotation.Y, new vec3(0, 1, 0));
+            _modelMatrix = glm.rotate(_modelMatrix, rotation.Z, new vec3(0, 0, 1));
+        }
+
+        private void SetPosition(Vec3 position)
+        {
+            _modelMatrix = glm.translate(_modelMatrix, new vec3(position.X, position.Y , position.Z));
         }
 
         private void SetMaterial(OpenGL gl, IMaterial material)
         {
-            material.Set(gl);
+            material.Set(gl, _shader);
         }
 
         private void UnsetMaterial(OpenGL gl, IMaterial material)

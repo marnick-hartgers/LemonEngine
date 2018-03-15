@@ -60,7 +60,7 @@ namespace LemonEngine.RenderLogic.ModelLoader
             while ((line = fileStream.ReadLine()) != null)
             {
                 line = line.Trim();
-                if (line.Length > 0)
+                if (line.Length > 0 && line[0] != '#')
                 {
 
                     string command = line.Substring(0, line.IndexOf(' '));
@@ -154,6 +154,19 @@ namespace LemonEngine.RenderLogic.ModelLoader
                 workingObject.FaceNormals.Add(normals[2]);
                 workingObject.FaceNormals.Add(normals[3]);
                 workingObject.FaceNormals.Add(normals[0]);
+
+                if (texCords.Count == 3)
+                {
+                    workingObject.FaceTextCords.Add(texCords[0]);
+                    workingObject.FaceTextCords.Add(texCords[1]);
+                    workingObject.FaceTextCords.Add(texCords[2]);
+
+                    workingObject.FaceTextCords.Add(texCords[2]);
+                    workingObject.FaceTextCords.Add(texCords[3]);
+                    workingObject.FaceTextCords.Add(texCords[0]);
+                }
+                
+
             }
             else
             {
@@ -213,7 +226,7 @@ namespace LemonEngine.RenderLogic.ModelLoader
         private float[] ParseFloatsFromString(string value)
         {
             //value = value.Replace(".",",");
-            string[] values = value.Split(new char[] { ' ', '/'});
+            string[] values = value.Trim().Split(new char[] { ' ', '/'});
             float[] result = new float[values.Length];
             for (int index = 0; index < values.Length; index++)
             {

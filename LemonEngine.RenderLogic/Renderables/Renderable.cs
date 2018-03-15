@@ -27,7 +27,7 @@ namespace LemonEngine.RenderLogic.Renderables
 
         public void DrawEntity(OpenGL gl, ICamera camera)
         {
-            Model.SetRotation(Rotation);
+            Model.SetParameters(Position, Rotation);
             Model.Draw(gl,camera);
         }
 

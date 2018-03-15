@@ -18,18 +18,20 @@ namespace LemonEngine.RenderLogic.Renderables.Model
         private VertexBuffer _difColorBuffer = new VertexBuffer();
         private VertexBuffer _speColorBuffer = new VertexBuffer();
         private VertexBuffer _normalBuffer = new VertexBuffer();
+        private VertexBuffer _textureBuffer = new VertexBuffer();
         //private VertexBuffer _normalBuffer = new VertexBuffer();
         public int VertexCount => _vertexData.Length;
 
 
 
         //private VertexBuffer _texcordBuffer = new VertexBuffer();
-        public ModelPart(string name, IMaterial material, float[] vertexData, float[] amColorData, float[] difColorData, float[] specColorData, float[] normalData)
+        public ModelPart(string name, IMaterial material, float[] vertexData, float[] amColorData, float[] difColorData, float[] specColorData, float[] normalData, float[] texCords)
         {
             Name = name;
             _material = material;
             _vertexData = vertexData;
             _normalData = normalData;
+            _textCordData = texCords;
             _ambColorData = amColorData;
             _difColorData = difColorData;
             _speColorData = specColorData;
@@ -38,6 +40,7 @@ namespace LemonEngine.RenderLogic.Renderables.Model
         private IMaterial _material { get; }
         private float[] _vertexData { get; }
         private float[] _normalData { get; }
+        private float[] _textCordData { get; }
         private float[] _ambColorData { get; }
         private float[] _difColorData { get; }
         private float[] _speColorData { get; }
@@ -70,17 +73,23 @@ namespace LemonEngine.RenderLogic.Renderables.Model
                 _normalBuffer.Bind(gl);
                 _normalBuffer.SetData(gl, shader.NormalAttributeIndex, _normalData, false, 3);
             }
+            _textureBuffer.Create(gl);
+            _textureBuffer.Bind(gl);
+            _textureBuffer.SetData(gl, shader.TextCordsAttributeIndex, _textCordData, false, 2);
+
             _buffers.Unbind(gl);
         }
 
         public void BindForDraw(OpenGL gl, IShader shader)
         {
             _buffers.Bind(gl);
+            _material.Set(gl, shader);
         }
 
         public void UnbindForDraw(OpenGL gl, IShader shader)
         {
             _buffers.Unbind(gl);
+            _material.Unset(gl);
         }
     }
 }

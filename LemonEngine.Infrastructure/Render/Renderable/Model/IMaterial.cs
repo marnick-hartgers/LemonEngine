@@ -1,4 +1,5 @@
-﻿using LemonEngine.Infrastructure.Types;
+﻿using LemonEngine.Infrastructure.Render.Shader;
+using LemonEngine.Infrastructure.Types;
 using SharpGL;
 
 namespace LemonEngine.Infrastructure.Render.Renderable.Model
@@ -8,7 +9,7 @@ namespace LemonEngine.Infrastructure.Render.Renderable.Model
         string Name { get; }
 
         void Init(OpenGL gl);
-        void Set(OpenGL gl);
+        void Set(OpenGL gl, IShader shader);
         void Unset(OpenGL gl);
         Vec3 AmbColor { get; }
         Vec3 DifColor { get; }

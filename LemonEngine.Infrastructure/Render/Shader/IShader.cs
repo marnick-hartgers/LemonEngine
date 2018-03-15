@@ -19,5 +19,6 @@ namespace LemonEngine.Infrastructure.Render.Shader
         uint DifColorAttributeIndex { get; }
         uint SpeColorAttributeIndex { get; }
         uint NormalAttributeIndex { get; }
+        uint TextCordsAttributeIndex { get; }
     }
 }
