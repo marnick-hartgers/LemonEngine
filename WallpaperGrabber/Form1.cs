@@ -107,21 +107,14 @@ namespace WallpaperGrabber
         private void openGLControl_OpenGLInitialized(object sender, EventArgs e)
         {
             _renderEngine.StartLoad(openGLControl.OpenGL);
-            testDing = _renderEngine.AddRenderable("LP_001", "");
+            //testDing = _renderEngine.AddRenderable("trainengine", "");
 
             //testDing = _renderEngine.AddRenderable("low-poly-mill", "");
-            testDing.Rotation.X = (float)Math.PI / -15.0f;
+            //testDing.Rotation.X = (float)Math.PI / -15.0f;
+            testDing.Rotation.Z = (float)Math.PI / 2.0f;
+            testDing.Rotation.X = (float)Math.PI / 2.0f;
             testDing.Position.Z = -5.0f;
             //testDing = _renderEngine.AddRenderable("giftbox", "");
-
-            var l = new Light(0);
-            l.Position.X = -1f;
-            l.Position.Y = -1f;
-            l.Position.Z = 0.5f;
-            l.Init(openGLControl.OpenGL);
-            
-
-            _renderEngine.AddLight(l);
 
         }
 

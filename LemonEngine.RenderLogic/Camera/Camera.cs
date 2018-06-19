@@ -27,6 +27,12 @@ namespace LemonEngine.RenderLogic.Camera
             Vec3.Copy(rotation, Rotation);
         }
 
+        public void SetAspectRatio(float x, float y)
+        {
+            const float rads = (60.0f / 360.0f) * (float)Math.PI * 2.0f;
+            projectionMatrix = glm.perspective(rads, x / y, 0.01f, 1000.0f);
+        }
+
         private mat4 projectionMatrix;
         private mat4 viewMatrix;
 

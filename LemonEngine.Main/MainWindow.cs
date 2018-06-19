@@ -66,7 +66,7 @@ namespace LemonEngine.Main
         private void openGLControl_OpenGLInitialized(object sender, EventArgs e)
         {
             _renderEngine.StartLoad(openGLControl.OpenGL);
-            testDing = _renderEngine.AddRenderable("bugatti", "");
+            //testDing = _renderEngine.AddRenderable("building-office-small", "");
             //testDing = _renderEngine.AddRenderable("LP_001", "");
             //testDing = _renderEngine.AddRenderable("low-poly-mill", "");
 
@@ -76,7 +76,7 @@ namespace LemonEngine.Main
             l.Position.Z = 1;
             l.Init(openGLControl.OpenGL);
 
-            
+            _renderEngine.RenderService.Camera.Position.X = -10;
             _renderEngine.AddLight(l);
 
         }

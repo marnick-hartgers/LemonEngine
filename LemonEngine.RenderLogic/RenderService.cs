@@ -11,6 +11,9 @@ using LemonEngine.RenderLogic.Renderables.Model;
 using LemonEngine.RenderLogic.Shaders;
 using LemonEngine.RenderLogic.Camera;
 using SharpGL;
+using LemonEngine.Infrastructure.Render.Settings;
+using LemonEngine.Infrastructure.Logic.Output;
+using System;
 
 namespace LemonEngine.RenderLogic
 {
@@ -21,7 +24,15 @@ namespace LemonEngine.RenderLogic
         private IModelRepository _modelRepository;
         private IMaterialRepository _materialRepository;
         private int _renderIndex = 0;
-        
+
+        private RenderSettings _renderSettings;
+        private LogicOutputContainer _lastOutput;
+
+        internal void SetAspectRatio(float x, float y)
+        {
+            Camera.SetAspectRatio(x,y);
+        }
+
         public ICamera Camera { get; private set; }
         public Vec3 SkyColor { get; set; }
 
@@ -36,10 +47,10 @@ namespace LemonEngine.RenderLogic
             _modelRepository.StartLoad(_materialRepository);
             _modelRepository.BindAll(gl);
             Camera = new Camera.Camera(this);
-            Camera.Position.X = 0;
-            Camera.Position.Y = -3;
+            Camera.Position.X = -5;
+            Camera.Position.Y = -4;
             Camera.Position.Z = -14;
-            SkyColor = new Vec3();
+            SkyColor = new Vec3(1,1,1);
 
             foreach (var materialGroup in _materialRepository.MaterialGroups)
             {
@@ -50,9 +61,9 @@ namespace LemonEngine.RenderLogic
             }
         }
 
-        public IRenderable AddRenderable(string model, string material)
+        private IRenderable AddRenderable(string model, Guid id )
         {
-            var r = new Renderable(model);
+            var r = new Renderable(model, id);
             _renderables.Add(r);
             return r;
         }
@@ -60,18 +71,53 @@ namespace LemonEngine.RenderLogic
 
         public void Render(OpenGL gl)
         {
-            gl.ClearColor(SkyColor.X, SkyColor.Y, SkyColor.Z, 1f);
+            UpdateFromOutput();
+            RenderSettings renderSettings = _renderSettings ?? RenderSettings.Empty;
+            gl.ClearColor(renderSettings.ClearColor.X, renderSettings.ClearColor.Y, renderSettings.ClearColor.Z, 1f);
             gl.Clear(OpenGL.GL_COLOR_BUFFER_BIT | OpenGL.GL_DEPTH_BUFFER_BIT | OpenGL.GL_STENCIL_BUFFER_BIT);
             gl.Enable(OpenGL.GL_DEPTH_TEST);
             _renderIndex = 0;
             while (_renderIndex < _renderables.Count)
             {
-                _renderables[_renderIndex].DrawEntity(gl, Camera);
+                _renderables[_renderIndex].DrawEntity(gl, Camera, renderSettings);
                 _renderIndex++;
             }
             
             gl.Flush();
         }
 
+        public void SetRenderSettings(RenderSettings renderSettings)
+        {
+            _renderSettings = renderSettings;
+        }
+
+        private void UpdateFromOutput()
+        {
+            LogicOutputContainer logicOutputContainer = _lastOutput;
+            var rendableDefs = logicOutputContainer.GetRenderbleDefenitions();
+            foreach (RenderbleDefenition rDef in rendableDefs)
+            {
+                UpdateRendable(rDef);
+            }
+        }
+
+        private void UpdateRendable(RenderbleDefenition rDef)
+        {
+            foreach (IRenderable rendable in _renderables)
+            {
+                if (rendable.Id.Equals(rDef.Id))
+                {
+                    rendable.SyncFromDefenition(rDef);
+                    return;
+                }
+            }
+            IRenderable r = AddRenderable(rDef.ModelName, rDef.Id);
+            r.SyncFromDefenition(rDef);
+        }
+
+        public void ReceiveOutput(LogicOutputContainer output)
+        {
+            _lastOutput = output;
+        }
     }
 }

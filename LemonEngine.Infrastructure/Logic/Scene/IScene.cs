@@ -9,8 +9,8 @@ namespace LemonEngine.Infrastructure.Logic.Scene
 {
     public interface IScene
     {
-        void Load(GameContext context);
-        void Unload(GameContext context);
-        void Iterate(GameContext context);
+        void Load(IGameContext context);
+        void Unload(IGameContext context);
+        void Iterate(IGameContext context);
     }
 }

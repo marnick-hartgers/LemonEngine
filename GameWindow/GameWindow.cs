@@ -67,7 +67,7 @@ namespace GameWindow
         }
         private void openGLControl_Resized(object sender, EventArgs e)
         {
-
+            _renderEngine.SetResolution(Width, Height);
         }
         private void openGLControl_OpenGLDraw(object sender, RenderEventArgs args)
         {

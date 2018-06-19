@@ -14,6 +14,10 @@ namespace LemonEngine.Infrastructure.Types
         {
             _values = new[] { x, y, z };
         }
+        public Vec3(Vec3 vec3)
+        {
+            _values = new[] { vec3.X, vec3.Y, vec3.Z };
+        }
 
         public Vec3 GetNormal()
         {

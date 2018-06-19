@@ -41,6 +41,12 @@ namespace LemonEngine.RenderLogic.ModelLoader
             return model;
         }
 
+        private Vec3 normalizise(Vec3 inValue)
+        {
+            float max = Math.Max(inValue.X, Math.Max(inValue.Y, inValue.Z));
+            return new Vec3(inValue.X / max, inValue.Y / max, inValue.Z / max);
+        }
+
         public ModelPart MakePart(ObjModelPart part)
         {
             if (part.FaceVertexes.Count == 0)
@@ -68,6 +74,13 @@ namespace LemonEngine.RenderLogic.ModelLoader
                 if (i < part.FaceNormals.Count)
                 {
                     var normal = Normals[part.FaceNormals[i]];
+                    normalData.Add(normal.X);
+                    normalData.Add(normal.Y);
+                    normalData.Add(normal.Z);
+                }
+                else
+                {
+                    var normal = normalizise(vertex);
                     normalData.Add(normal.X);
                     normalData.Add(normal.Y);
                     normalData.Add(normal.Z);

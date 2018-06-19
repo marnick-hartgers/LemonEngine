@@ -43,6 +43,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Game\Scenes\WelcomeScene.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Window\OrganodronMainWindow.cs">
@@ -57,9 +58,19 @@
       <Project>{1B416651-A920-43F4-B934-CE3029506D66}</Project>
       <Name>GameWindow</Name>
     </ProjectReference>
+    <ProjectReference Include="..\LemonEngine.Infrastructure\LemonEngine.Infrastructure.csproj">
+      <Project>{1810787D-C853-4D8F-B992-0DE04C14AD2E}</Project>
+      <Name>LemonEngine.Infrastructure</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\LemonEngine.Logic\LemonEngine.Logic.csproj">
+      <Project>{5EE511E0-DA56-4992-83C5-5EE2AAA62961}</Project>
+      <Name>LemonEngine.Logic</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\LemonEngine.RenderLogic\LemonEngine.RenderLogic.csproj">
+      <Project>{7CD2492E-8017-42E8-BCF5-9629F66F04EA}</Project>
+      <Name>LemonEngine.RenderLogic</Name>
+    </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Game\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

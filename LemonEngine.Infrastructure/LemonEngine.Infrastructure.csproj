@@ -48,9 +48,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Logic\Context\GameContext.cs" />
-    <Compile Include="Logic\Entity\IMaintainable.cs" />
-    <Compile Include="Logic\Scene\ILevel.cs" />
+    <Compile Include="Logic\Context\IGameContext.cs" />
+    <Compile Include="Logic\Context\IGraphicsContext.cs" />
+    <Compile Include="Logic\Entity\IEntity.cs" />
+    <Compile Include="Logic\Output\LogicOutputContainer.cs" />
+    <Compile Include="Logic\Output\RenderbleDefenition.cs" />
+    <Compile Include="Logic\Scene\IScene.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Render\Camera\ICamera.cs" />
     <Compile Include="Render\Light\ILight.cs" />
@@ -63,6 +66,7 @@
     <Compile Include="Render\Renderable\Model\IMaterial.cs" />
     <Compile Include="Render\Renderable\Model\IModel.cs" />
     <Compile Include="Render\Renderable\IRenderable.cs" />
+    <Compile Include="Render\Settings\RenderSettings.cs" />
     <Compile Include="Render\Shader\IShader.cs" />
     <Compile Include="Types\Int4.cs" />
     <Compile Include="Types\Render\Polygon.cs" />

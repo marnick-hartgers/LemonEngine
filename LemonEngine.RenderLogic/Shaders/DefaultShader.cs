@@ -122,15 +122,17 @@ namespace LemonEngine.RenderLogic.Shaders
             vec3 spec = vec3(0.0);
             
             spec = pow(max(dot(r, v), 0.0), 3.0) * pass_SpeColor;
-            vec3 color = pass_AmbColor * 0.1 + pass_DifColor * sdn + 0.15 * (spec * sdn);
+            vec3 color = pass_AmbColor + pass_DifColor * sdn + 0.15 * (spec * sdn);
             
             if(hasTex == 1){
                 out_Color = vec4(texture( tex, vec2(pass_tex.x, 1-pass_tex.y)).rgb * color , 1);
+                //out_Color = vec4(texture( tex, vec2(pass_tex.x, 1-pass_tex.y)).rgb , 1);
                 if(max(max(out_Color.x,out_Color.y),out_Color.z) == 0){
                     discard;
                 }
             }else{
                 out_Color = vec4(color,1.0);
+                
             }
             
 	        //out_Color = vec4(pass_tex, 0.0,1.0);

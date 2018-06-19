@@ -28,11 +28,6 @@ namespace LemonEngine.RenderLogic
             OnLoadDone?.Invoke(this, EventArgs.Empty);
         }
 
-        public IRenderable AddRenderable(string model, string material)
-        {
-            return _renderService.AddRenderable(model, material);
-        }
-
         public void Render(OpenGL gl)
         {
             _renderService.Render(gl);
@@ -46,6 +41,7 @@ namespace LemonEngine.RenderLogic
 
         public void SetResolution(int x, int y)
         {
+            _renderService.SetAspectRatio((float)x, (float)y);
             OnResized?.Invoke(this, new ResizedEventArgs(x,y));
         }
     }

@@ -1,14 +1,16 @@
 ﻿using SharpGL;
 using LemonEngine.Infrastructure.Render.Light;
 using LemonEngine.Infrastructure.Types;
+using LemonEngine.Infrastructure.Render.Settings;
+using LemonEngine.Infrastructure.Logic.Output;
 
 namespace LemonEngine.Infrastructure.Render.Renderable
 {
     public interface IRenderService
     {
         void Init(OpenGL gl);
-        IRenderable AddRenderable(string model, string material);
         void Render(OpenGL gl);
-        Vec3 SkyColor { get; set; }
+        void SetRenderSettings(RenderSettings renderSettings);
+        void ReceiveOutput(LogicOutputContainer output);
     }
 }
