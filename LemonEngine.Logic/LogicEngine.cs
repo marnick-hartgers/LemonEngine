@@ -1,6 +1,7 @@
 ﻿using LemonEngine.Infrastructure.Logic.Context;
 using LemonEngine.Infrastructure.Logic.Scene;
 using LemonEngine.Infrastructure.Render.Renderable;
+using LemonEngine.Infrastructure.Types;
 using LemonEngine.RenderLogic;
 using System;
 using System.Threading;
@@ -12,6 +13,8 @@ namespace LemonEngine.Logic
         private GameContext _context;
         private Timer _iterateTimer;
         private long _lastRun = 0;
+
+        private Vec2 _mouseMovement = new Vec2();
         public EventHandler AfterUpdateEventHandler;
         private IRenderService _renderService;
 
@@ -37,12 +40,20 @@ namespace LemonEngine.Logic
             _iterateTimer.Change(Int32.MaxValue, Int32.MaxValue);
         }
 
+        public void ReceiveMouseMovement(int x, int y)
+        {
+            _mouseMovement.X += x;
+            _mouseMovement.Y += y;
+        }
+
         private void Iterate()
         {
-
+            _context.SetMouseMovement(new Vec2(_mouseMovement));
             _context.Iterate();
             SyncWithRenderEngine();
             AfterUpdateEventHandler?.Invoke(this, EventArgs.Empty);
+            _mouseMovement.X = 0;
+            _mouseMovement.Y = 0;
         }
 
         private void SyncWithRenderEngine()

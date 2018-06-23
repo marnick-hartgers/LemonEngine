@@ -78,6 +78,8 @@
     </Compile>
     <Compile Include="Events\ResizedEventEventArgs.cs" />
     <Compile Include="Shaders\DefaultShader.cs" />
+    <Compile Include="Shaders\FrameBuffer.cs" />
+    <Compile Include="Shaders\Programs\FrameBufferTextureProgram.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

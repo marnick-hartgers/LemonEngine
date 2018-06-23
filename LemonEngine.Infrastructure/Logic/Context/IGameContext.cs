@@ -4,9 +4,11 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using LemonEngine.Infrastructure.Logic.Maintainable;
 using LemonEngine.Infrastructure.Logic.Objects;
 using LemonEngine.Infrastructure.Logic.Scene;
 using LemonEngine.Infrastructure.Render.Renderable;
+using LemonEngine.Infrastructure.Types;
 
 namespace LemonEngine.Infrastructure.Logic.Context
 {
@@ -18,8 +20,14 @@ namespace LemonEngine.Infrastructure.Logic.Context
 
         void AddEntity(IEntity entity);
 
+        void AddMaintainable(IMaintainable maintainable);
+
         void SyncObjects(IRenderService engine);        
 
         IGraphicsContext GraphicsContext { get; }
+
+        ICameraContext CameraContext { get; }
+
+        Vec2 MouseMovement { get; }
     }
 }

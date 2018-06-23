@@ -15,6 +15,11 @@ namespace LemonEngine.Infrastructure.Types
             _values = new[] { x, y };
         }
 
+        public Vec2(Vec2 input)
+        {
+            _values = new[] { input.X, input.Y };
+        }
+
 
         public static Vec2 operator +(Vec2 a, Vec2 b)
         {

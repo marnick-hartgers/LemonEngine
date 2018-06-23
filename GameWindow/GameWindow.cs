@@ -18,13 +18,14 @@ namespace GameWindow
         private OpenGLControl openGLControl = null;
 
         private RenderEnigne _renderEngine;
-        public RenderService RenderService => _renderEngine.RenderService; 
+        public RenderService RenderService => _renderEngine.RenderService;
 
         public GameWindow(string name)
         {
             _renderEngine = new RenderEnigne();
             InitializeComponent();
             InitOpenGl(name);
+
         }
 
         private void InitOpenGl(string name)
@@ -68,15 +69,35 @@ namespace GameWindow
         private void openGLControl_Resized(object sender, EventArgs e)
         {
             _renderEngine.SetResolution(Width, Height);
+            
         }
         private void openGLControl_OpenGLDraw(object sender, RenderEventArgs args)
         {
             OnDraw();
             _renderEngine.Render(openGLControl.OpenGL);
+            CheckMouseMovement();
+        }
+
+        private void CheckMouseMovement()
+        {
+            if (!ContainsFocus)
+            {
+                return;
+            }
+            int centerX = this.Location.X + (this.Size.Width / 2);
+            int centerY = this.Location.Y + (this.Size.Height / 2);
+
+            OnMouseMovement(Cursor.Position.X - centerX, Cursor.Position.Y - centerY);
+
+            this.Cursor = new Cursor(Cursor.Current.Handle);
+            Cursor.Position = new Point(centerX, centerY);
+            Cursor.Clip = new Rectangle(this.Location, this.Size);
         }
 
         protected virtual void OnInit() { }
 
-        protected virtual void OnDraw(){ }
+        protected virtual void OnDraw() { }
+
+        protected virtual void OnMouseMovement(int x, int y) { }
     }
 }

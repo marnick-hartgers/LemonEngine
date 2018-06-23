@@ -48,13 +48,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Logic\Context\ICameraContext.cs" />
     <Compile Include="Logic\Context\IGameContext.cs" />
     <Compile Include="Logic\Context\IGraphicsContext.cs" />
     <Compile Include="Logic\Entity\IEntity.cs" />
+    <Compile Include="Logic\Maintainable\IMaintainable.cs" />
     <Compile Include="Logic\Output\LogicOutputContainer.cs" />
     <Compile Include="Logic\Output\RenderbleDefenition.cs" />
     <Compile Include="Logic\Scene\IScene.cs" />
+    <Compile Include="Math\FMath.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Render\Camera\CameraSettings.cs" />
     <Compile Include="Render\Camera\ICamera.cs" />
     <Compile Include="Render\Light\ILight.cs" />
     <Compile Include="Render\Renderable\IRenderService.cs" />

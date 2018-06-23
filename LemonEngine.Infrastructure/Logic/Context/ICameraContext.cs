@@ -1,5 +1,4 @@
-﻿using LemonEngine.Infrastructure.Render.Renderable;
-using LemonEngine.Infrastructure.Types;
+﻿using LemonEngine.Infrastructure.Types;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,8 +7,11 @@ using System.Threading.Tasks;
 
 namespace LemonEngine.Infrastructure.Logic.Context
 {
-    public interface IGraphicsContext
+    public interface ICameraContext
     {
-        void SetClearColor(Vec3 color);
+        Vec3 Position { get; }
+        Vec3 Rotation { get; }
+        float FieldOfView { get; }
     }
+
 }

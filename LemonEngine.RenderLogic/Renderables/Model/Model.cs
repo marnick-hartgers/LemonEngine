@@ -56,9 +56,13 @@ namespace LemonEngine.RenderLogic.Renderables.Model
 
         private void SetRotation(Vec3 rotation)
         {
-            _modelMatrix = glm.rotate(_modelMatrix, rotation.X, new vec3(1, 0, 0));
-            _modelMatrix = glm.rotate(_modelMatrix, rotation.Y, new vec3(0, 1, 0));
-            _modelMatrix = glm.rotate(_modelMatrix, rotation.Z, new vec3(0, 0, 1));
+            if (rotation.Max == 0 && rotation.Min == 0)
+            {
+                return;
+            }
+            float angle = rotation.Max;
+            Vec3 normal = rotation.GetNormal();
+            _modelMatrix = glm.rotate(_modelMatrix, angle, new vec3(normal.X, normal.Y, normal.Z));
         }
 
         private void SetPosition(Vec3 position)

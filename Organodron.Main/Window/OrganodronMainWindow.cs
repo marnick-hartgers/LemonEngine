@@ -23,5 +23,11 @@ namespace Organodron.Main.Window
             _logicEngine.SetOutput(RenderService);
             _logicEngine.Start(new WelcomeScene());
         }
+
+        protected override void OnMouseMovement(int x, int y)
+        {
+            base.OnMouseMovement(x, y);
+            _logicEngine.ReceiveMouseMovement(x, y);
+        }
     }
 }

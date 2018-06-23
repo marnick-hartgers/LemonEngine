@@ -78,19 +78,24 @@ namespace LemonEngine.RenderLogic.Shaders
         out mat3 pass_model;
         out vec3 pass_pos;
         out vec2 pass_tex;
+        out mat3 pass_viewMatrix;
+        out vec3 pass_lightDir;
         uniform mat4 projectionMatrix;
         uniform mat4 viewMatrix;
         uniform mat4 modelMatrix;
+        uniform mat4 viewMatrixRotation;
         uniform float hasTex;
 
         void main(void) {
-	        gl_Position = projectionMatrix * viewMatrix * modelMatrix * vec4(in_Position, 1.0);
+	        gl_Position = projectionMatrix * (viewMatrix * (modelMatrix * vec4(in_Position, 1.0)));
             pass_Normal = in_Normal;
-            pass_model = mat3(modelMatrix);
+            pass_model = mat3(modelMatrix );
+            pass_viewMatrix = mat3(viewMatrix );
             pass_AmbColor = in_AmbColor;
             pass_DifColor = in_DifColor;
             pass_SpeColor = in_SpeColor;
-            pass_pos = pass_model * in_Position;
+            pass_pos = vec3(gl_Position);
+            pass_lightDir = vec3(0,1,1) * mat3(viewMatrixRotation);
             if(hasTex == 1){
                 pass_tex = in_tex;
             }
@@ -105,24 +110,26 @@ namespace LemonEngine.RenderLogic.Shaders
         in mat3 pass_model;
         in vec3 pass_pos;
         in vec2 pass_tex;
+        in mat3 pass_viewMatrix;
+        in vec3 pass_lightDir;
         out vec4 out_Color;
 
         uniform sampler2D tex;
         uniform float hasTex;
 
         void main(void) {
-            vec3 n = normalize(pass_model * pass_Normal) * vec3(0,1,1); 
-            vec3 s = vec3(1.0, 1.0, 1.0);
+            vec3 n = normalize(pass_model * pass_Normal) * pass_lightDir; 
+            vec3 s = pass_lightDir;
 
             float sdn = max(dot(n, s), 0.0);
             
-            vec3 v = normalize(-pass_pos);
+            vec3 v = normalize(pass_pos);
             vec3 r = reflect(-s, n);
 
             vec3 spec = vec3(0.0);
             
             spec = pow(max(dot(r, v), 0.0), 3.0) * pass_SpeColor;
-            vec3 color = pass_AmbColor + pass_DifColor * sdn + 0.15 * (spec * sdn);
+            vec3 color = pass_AmbColor + pass_DifColor * (sdn + 0.15) + (0.15 * spec);
             
             if(hasTex == 1){
                 out_Color = vec4(texture( tex, vec2(pass_tex.x, 1-pass_tex.y)).rgb * color , 1);

@@ -15,11 +15,13 @@ namespace LemonEngine.RenderLogic
 
         private RenderService _renderService;
         public RenderService RenderService => _renderService;
+
+        private bool _loaded = false;
         
         public void StartLoad(OpenGL gl)
         {
             _renderService = new RenderService();
-            _renderService.Init(gl);
+            
             SignalLoadDone();
         }
 
@@ -30,6 +32,11 @@ namespace LemonEngine.RenderLogic
 
         public void Render(OpenGL gl)
         {
+            if (!_loaded)
+            {
+                _loaded = true;
+                _renderService.Init(gl);
+            }
             _renderService.Render(gl);
             
         }

@@ -39,10 +39,5 @@ namespace LemonEngine.Logic.Entity
         {
 
         }
-
-        public void Update()
-        {
-            Rotation.Y = (Rotation.Y + 0.01f) % ((float)Math.PI * 2f);
-        }
     }
 }

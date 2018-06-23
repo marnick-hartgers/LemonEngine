@@ -17,8 +17,6 @@ namespace LemonEngine.Main
 
         private RenderEnigne _renderEngine;
 
-        private IRenderable testDing;
-
         public MainWindow()
         {
             //InitializeComponent();
@@ -89,21 +87,6 @@ namespace LemonEngine.Main
         private void openGLControl_OpenGLDraw(object sender, RenderEventArgs args)
         {
             _renderEngine.Render(openGLControl.OpenGL);
-        }
-
-        private void trackBar1_Scroll(object sender, EventArgs e)
-        {
-            testDing.Rotation.X = (float) trackBar1.Value/50;
-        }
-
-        private void trackBar2_Scroll(object sender, EventArgs e)
-        {
-            testDing.Rotation.Y = (float)trackBar2.Value / 50;
-        }
-
-        private void trackBar3_Scroll(object sender, EventArgs e)
-        {
-            testDing.Rotation.Z = (float)trackBar3.Value / 50;
         }
     }
 }

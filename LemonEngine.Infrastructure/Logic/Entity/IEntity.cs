@@ -5,7 +5,6 @@ namespace LemonEngine.Infrastructure.Logic.Objects
 {
     public interface IEntity
     {
-        void Update();
         void Dispose();
         Guid Id { get; }
         string ModelName { get; }

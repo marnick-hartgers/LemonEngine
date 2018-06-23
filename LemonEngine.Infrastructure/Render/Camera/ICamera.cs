@@ -11,5 +11,6 @@ namespace LemonEngine.Infrastructure.Render.Camera
         void SetAspectRatio(float x, float y);
         Vec3 Position { get; }
         Vec3 Rotation { get; }
+        float FieldOfView { get; set; }
     }
 }

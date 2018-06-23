@@ -67,7 +67,8 @@ namespace LemonEngine.RenderLogic.MaterialLoader
                 if (line.Length > 0)
                 {
 
-                    string command = line.Substring(0, line.IndexOf(' '));
+                    int commandEnd = line.IndexOf(' ');
+                    string command = line.Substring(0, commandEnd > 0 ? commandEnd : 1);
                     string value = line.Substring(line.IndexOf(' ') + 1);
                     switch (command.ToUpper())
                     {

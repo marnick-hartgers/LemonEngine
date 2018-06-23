@@ -44,7 +44,8 @@ namespace LemonEngine.RenderLogic.ModelLoader
         private Vec3 normalizise(Vec3 inValue)
         {
             float max = Math.Max(inValue.X, Math.Max(inValue.Y, inValue.Z));
-            return new Vec3(inValue.X / max, inValue.Y / max, inValue.Z / max);
+            //return new Vec3(inValue.X / max, inValue.Y / max, inValue.Z / max);
+            return new Vec3(0,1,0);
         }
 
         public ModelPart MakePart(ObjModelPart part)

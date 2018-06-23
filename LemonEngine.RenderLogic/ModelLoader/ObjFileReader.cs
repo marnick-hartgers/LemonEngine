@@ -11,7 +11,7 @@ namespace LemonEngine.RenderLogic.ModelLoader
     {
         private string resourceFolder = "";
 
-        public List<Model> ReadFolder( IMaterialRepository materialRepo)
+        public List<Model> ReadFolder(IMaterialRepository materialRepo)
         {
             List<Model> models = new List<Model>();
             MakeFolder();
@@ -65,7 +65,7 @@ namespace LemonEngine.RenderLogic.ModelLoader
 
                     string command = line.Substring(0, line.IndexOf(' '));
                     string value = line.Substring(line.IndexOf(' ') + 1);
-                    
+
 
                     switch (command.ToUpper())
                     {
@@ -155,7 +155,7 @@ namespace LemonEngine.RenderLogic.ModelLoader
                 workingObject.FaceNormals.Add(normals[3]);
                 workingObject.FaceNormals.Add(normals[0]);
 
-                if (texCords.Count == 3)
+                if (texCords.Count == 4)
                 {
                     workingObject.FaceTextCords.Add(texCords[0]);
                     workingObject.FaceTextCords.Add(texCords[1]);
@@ -165,14 +165,31 @@ namespace LemonEngine.RenderLogic.ModelLoader
                     workingObject.FaceTextCords.Add(texCords[3]);
                     workingObject.FaceTextCords.Add(texCords[0]);
                 }
-                
+
 
             }
             else
             {
-                throw new Exception("Not supported yet");
+                Console.WriteLine("OBJ vertext overflow: " + vertexes.Count + " in object " + workingObject.Name);
+                for (int i = 0; i < vertexes.Count; i++)
+                {
+                    int m = vertexes.Count - 1;
+                    workingObject.FaceVertexes.Add(vertexes[0 + i]);
+                    workingObject.FaceVertexes.Add(vertexes[m % (1 + i)]);
+                    workingObject.FaceVertexes.Add(vertexes[m % (2 + i)]);
+
+                    workingObject.FaceNormals.Add(normals[0 + i]);
+                    workingObject.FaceNormals.Add(normals[m % (1 + i)]);
+                    workingObject.FaceNormals.Add(normals[m % (2 + i)]);
+                    if (texCords.Count == vertexes.Count)
+                    {
+                        workingObject.FaceTextCords.Add(texCords[0 + i]);
+                        workingObject.FaceTextCords.Add(texCords[m % (1 + i)]);
+                        workingObject.FaceTextCords.Add(texCords[m % (2 + i)]);
+                    }
+                }
             }
-            
+
         }
 
         private void AddVertex(ObjModel workingObject, string value)
@@ -226,16 +243,34 @@ namespace LemonEngine.RenderLogic.ModelLoader
         private float[] ParseFloatsFromString(string value)
         {
             //value = value.Replace(".",",");
-            string[] values = value.Trim().Split(new char[] { ' ', '/'});
+            string[] values = value.Trim().Split(new char[] { ' ', '/' });
             float[] result = new float[values.Length];
             for (int index = 0; index < values.Length; index++)
             {
                 if (values[index].IndexOf(".") != -1 && values[index].IndexOf(".") + 5 < values[index].Length)
                 {
-                    values[index] = values[index].Substring(0, values[index].IndexOf(".") + 6); 
+                    values[index] = values[index].Substring(0, values[index].IndexOf(".") + 6);
                 }
+                int exponent = 1;
+                if (values[index].IndexOf('e') != -1)
+                {
+                    string exponentString = values[index].Substring(values[index].IndexOf('e'));
+                    values[index] = values[index].Substring(0, values[index].IndexOf('e'));
+                    if (exponentString != "e" && exponentString != "e-")
+                    {
+                        int ex = int.Parse(exponentString.Substring(1));
+                        exponent = ex;
+                    }
+
+                }
+
+
                 result[index] = float.Parse(values[index]);
-                //Console.WriteLine(values[index] + "=" + result[index]);
+                if (exponent != 1)
+                {
+                    result[index] = (float)Math.Pow(result[index], exponent);
+                    Console.WriteLine("' " + values[index] + "'" + " = " + result[index] + "    exp:" + exponent);
+                }
 
             }
             return result;

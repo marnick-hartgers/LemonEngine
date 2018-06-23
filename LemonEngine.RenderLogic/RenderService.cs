@@ -1,19 +1,17 @@
 ﻿using System.Collections.Generic;
 using LemonEngine.Infrastructure.Render.Camera;
-using LemonEngine.Infrastructure.Render.Light;
 using LemonEngine.Infrastructure.Render.Renderable;
 using LemonEngine.Infrastructure.Render.Renderable.Model;
-using LemonEngine.Infrastructure.Render.Shader;
 using LemonEngine.Infrastructure.Types;
 using LemonEngine.RenderLogic.Renderables;
 using LemonEngine.RenderLogic.Renderables.Material;
 using LemonEngine.RenderLogic.Renderables.Model;
-using LemonEngine.RenderLogic.Shaders;
-using LemonEngine.RenderLogic.Camera;
 using SharpGL;
 using LemonEngine.Infrastructure.Render.Settings;
+using LemonEngine.Infrastructure.Render.Camera;
 using LemonEngine.Infrastructure.Logic.Output;
 using System;
+using LemonEngine.RenderLogic.Shaders;
 
 namespace LemonEngine.RenderLogic
 {
@@ -26,7 +24,14 @@ namespace LemonEngine.RenderLogic
         private int _renderIndex = 0;
 
         private RenderSettings _renderSettings;
+        private CameraSettings _cameraSettings;
         private LogicOutputContainer _lastOutput;
+        private FrameBuffer _frameBuffer = new FrameBuffer();
+
+        public RenderService()
+        {
+            Camera = new Camera.Camera();
+        }
 
         internal void SetAspectRatio(float x, float y)
         {
@@ -39,18 +44,19 @@ namespace LemonEngine.RenderLogic
 
         public void Init(OpenGL gl)
         {
-            gl.BlendFunc(OpenGL.GL_SRC_ALPHA, OpenGL.GL_ONE_MINUS_SRC_ALPHA);
-            gl.Enable(OpenGL.GL_BLEND);
+            _frameBuffer.Init(gl);
+            //gl.BlendFunc(OpenGL.GL_SRC_ALPHA, OpenGL.GL_ONE_MINUS_SRC_ALPHA);
+            //gl.Enable(OpenGL.GL_BLEND);
+
             _materialRepository = MaterialRepository.GetInstance();
             _materialRepository.Load(gl);
             _modelRepository = ModelRepository.GetInstance();
             _modelRepository.StartLoad(_materialRepository);
             _modelRepository.BindAll(gl);
-            Camera = new Camera.Camera(this);
             Camera.Position.X = -5;
             Camera.Position.Y = -4;
             Camera.Position.Z = -14;
-            SkyColor = new Vec3(1,1,1);
+            SkyColor = new Vec3(1, 1, 1);
 
             foreach (var materialGroup in _materialRepository.MaterialGroups)
             {
@@ -59,6 +65,8 @@ namespace LemonEngine.RenderLogic
                     material.Init(gl);
                 }
             }
+
+
         }
 
         private IRenderable AddRenderable(string model, Guid id )
@@ -71,6 +79,8 @@ namespace LemonEngine.RenderLogic
 
         public void Render(OpenGL gl)
         {
+            _frameBuffer.BeginRender(gl);
+            UpdateCamera();
             UpdateFromOutput();
             RenderSettings renderSettings = _renderSettings ?? RenderSettings.Empty;
             gl.ClearColor(renderSettings.ClearColor.X, renderSettings.ClearColor.Y, renderSettings.ClearColor.Z, 1f);
@@ -82,6 +92,7 @@ namespace LemonEngine.RenderLogic
                 _renderables[_renderIndex].DrawEntity(gl, Camera, renderSettings);
                 _renderIndex++;
             }
+            _frameBuffer.EndRender(gl);
             
             gl.Flush();
         }
@@ -118,6 +129,18 @@ namespace LemonEngine.RenderLogic
         public void ReceiveOutput(LogicOutputContainer output)
         {
             _lastOutput = output;
+        }
+
+        public void SetCamera(CameraSettings cameraSettings)
+        {
+            _cameraSettings = cameraSettings;
+        }
+
+        private void UpdateCamera()
+        {
+            Camera.Position.CopyFrom(_cameraSettings.Position);
+            Camera.Rotation.CopyFrom(_cameraSettings.Rotation);
+            Camera.FieldOfView = _cameraSettings.FieldOfView;
         }
     }
 }

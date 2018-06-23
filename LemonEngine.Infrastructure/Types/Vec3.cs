@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LemonEngine.Infrastructure.Math;
+using System;
 
 namespace LemonEngine.Infrastructure.Types
 {
@@ -21,10 +22,30 @@ namespace LemonEngine.Infrastructure.Types
 
         public Vec3 GetNormal()
         {
-            float distance = (float)Math.Sqrt(X * X + Y * Y + Z * Z);
+            float distance = (float)System.Math.Sqrt(X * X + Y * Y + Z * Z);
             return new Vec3(X / distance, Y / distance, Z / distance);
         }
 
+        public float Max
+        {
+            get {
+                return FMath.Max(FMath.Max(_values[0], _values[1]), _values[1]);
+            }
+        }
+        public float Min
+        {
+            get
+            {
+                return FMath.Min(FMath.Min(_values[0], _values[1]), _values[1]);
+            }
+        }
+
+        public void CopyFrom(Vec3 input)
+        {
+            this._values[0] = input.X;
+            this._values[1] = input.Y;
+            this._values[2] = input.Z;
+        }
 
         public static Vec3 operator +(Vec3 a, Vec3 b)
         {
