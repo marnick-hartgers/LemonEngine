@@ -65,6 +65,10 @@
       <Project>{1810787D-C853-4D8F-B992-0DE04C14AD2E}</Project>
       <Name>LemonEngine.Infrastructure</Name>
     </ProjectReference>
+    <ProjectReference Include="..\LemonEngine.Physics\LemonEngine.Physics.csproj">
+      <Project>{d0dd18d3-4873-42d1-9bfe-61df145d3974}</Project>
+      <Name>LemonEngine.Physics</Name>
+    </ProjectReference>
     <ProjectReference Include="..\LemonEngine.RenderLogic\LemonEngine.RenderLogic.csproj">
       <Project>{7CD2492E-8017-42E8-BCF5-9629F66F04EA}</Project>
       <Name>LemonEngine.RenderLogic</Name>

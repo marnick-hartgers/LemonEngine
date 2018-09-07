@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using LemonEngine.Infrastructure.Logic.Maintainable;
-using LemonEngine.Infrastructure.Logic.Objects;
+using LemonEngine.Infrastructure.Logic.Entity;
 using LemonEngine.Infrastructure.Logic.Output;
 using LemonEngine.Infrastructure.Logic.Scene;
 using LemonEngine.Infrastructure.Render.Renderable;
 using LemonEngine.Infrastructure.Types;
 using LemonEngine.Logic.Context;
+using LemonEngine.Physics.Simulation;
 
 namespace LemonEngine.Infrastructure.Logic.Context
 {
@@ -26,6 +27,8 @@ namespace LemonEngine.Infrastructure.Logic.Context
         private List<IEntity> _entities = new List<IEntity>();
         private List<IMaintainable> _maintainables = new List<IMaintainable>();
 
+        private EntitySimulationUpdater entitySimulationUpdater = new EntitySimulationUpdater();
+
         public void Iterate()
         {
             if (_currentScene != null)
@@ -36,6 +39,7 @@ namespace LemonEngine.Infrastructure.Logic.Context
             {
                 m.Update(this);
             }
+            entitySimulationUpdater.Run(ref _entities, 1.0f);
         }
 
         public void LoadLevel(IScene scene)
@@ -90,5 +94,6 @@ namespace LemonEngine.Infrastructure.Logic.Context
             renderService.ReceiveOutput(output);
 
         }
+
     }
 }

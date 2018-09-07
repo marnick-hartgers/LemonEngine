@@ -1,4 +1,4 @@
-﻿using LemonEngine.Infrastructure.Logic.Objects;
+﻿using LemonEngine.Infrastructure.Logic.Entity;
 using LemonEngine.Infrastructure.Types;
 using System;
 using System.Collections.Generic;
@@ -34,6 +34,12 @@ namespace LemonEngine.Logic.Entity
         public Vec3 RotationDelta { get; private set; }
 
         public Vec3 Scale { get; private set; }
+
+        public Vec3 Velocity { get; private set; }
+
+        public Vec3 RotationalVelocity { get; private set; }
+
+
 
         public void Dispose()
         {

@@ -59,7 +59,8 @@ namespace LemonEngine.RenderLogic.Shaders.Programs
             uniform sampler2D screenTexture;
 
             const int quality = 10;
-            const float offset = 1.0 / 800.0;
+            const float offset = 1.0 / 500.0;
+            const float bloomMin = 0.6;
             const float halfTotal = offset * quality / 2;
 
             void main()
@@ -67,20 +68,22 @@ namespace LemonEngine.RenderLogic.Shaders.Programs
                 vec3 sampleTex[9];
                 vec3 col = vec3(0.0);
                 vec3 org = vec3(texture(screenTexture, TexCoords));
-                float count = 1;
+
                 for(int i = 0; i < (quality * quality); i++)
                 {
                     vec3 sample = vec3(texture(screenTexture, TexCoords + vec2(
                     -halfTotal + offset * (i % quality),
                     -halfTotal + offset * floor(i / quality)
                     )));
-                    col = col + sample * 1.5;
-                    count++;
+                    if((sample.r + sample.g + sample.b) / 3.0 > bloomMin){
+                        col = col + sample;
+                    }                    
+                    
                 }
-                col /= count;
+                col /= (quality * quality);
                 
                 
-                org = max(org, org * col * 2.0);//+ (col * col * col);
+                org = max(org, col);
                 FragColor = vec4( org, 1.0);
             }
 ";

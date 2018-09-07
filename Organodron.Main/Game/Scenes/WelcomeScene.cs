@@ -5,6 +5,7 @@ using LemonEngine.Infrastructure.Types;
 using LemonEngine.Logic.Entity;
 using LemonEngine.Logic.Maintainables.Camera;
 using LemonEngine.Logic.Scene;
+using Organodron.Main.Game.Objects.Test;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,25 +18,27 @@ namespace Organodron.Main.Game.Scenes
     {
         long counter = 0;
         Random r = new Random();
+        Entity ent;
         public override void Iterate(IGameContext context)
         {
             base.Iterate(context);
             counter++;
-            context.CameraContext.Position.X = 40 + 20 * FMath.Sin(counter / 300f);
-            context.CameraContext.Position.Z = 40 + 20 * FMath.Cos(counter / 300f);
+            //context.CameraContext.Position.X = 10 * FMath.Sin(counter / 300f);
+            //context.CameraContext.Position.Z = 10 * FMath.Cos(counter / 300f);
+            ent.Rotation.Y = (counter / 100f) % FMath.PI2;
         }
 
         public override void Load(IGameContext context)
         {
             base.Load(context);
-            context.GraphicsContext.SetClearColor(new Vec3(0.6f,0.6f,1f));
+            context.GraphicsContext.SetClearColor(new Vec3(0.1f,0.1f,0.1f));
 
-            context.AddMaintainable(new FirstPersonCameraMaintainable());
-            context.CameraContext.Position.Y = 10;
+            //context.AddMaintainable(new FirstPersonCameraMaintainable());
+            context.CameraContext.Position.Y = 3;
             
-            Entity ent = new Entity("world");
-            ent.Position.X = 80;
-            ent.Position.Z = 0;
+            ent = new TestCube();
+            ent.Position.X = 0;
+            ent.Position.Z = -20;
             context.AddEntity(ent);
             
         }

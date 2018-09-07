@@ -1,7 +1,7 @@
 ﻿using LemonEngine.Infrastructure.Types;
 using System;
 
-namespace LemonEngine.Infrastructure.Logic.Objects
+namespace LemonEngine.Infrastructure.Logic.Entity
 {
     public interface IEntity
     {
@@ -13,5 +13,7 @@ namespace LemonEngine.Infrastructure.Logic.Objects
         Vec3 Rotation { get; }
         Vec3 RotationDelta { get; }
         Vec3 Scale { get; }
+        Vec3 Velocity { get; }
+        Vec3 RotationalVelocity { get; }
     }
 }

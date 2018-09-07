@@ -25,6 +25,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Organodron.Main", "Organodr
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LemonEngine.GameUtils", "LemonEngine.GameUtils\LemonEngine.GameUtils.csproj", "{5F446E0F-64DE-4C3C-B0C2-846F44569DDD}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Physics", "Physics", "{829D6899-5188-41EF-A99C-F3B74260AEFF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LemonEngine.Physics", "LemonEngine.Physics\LemonEngine.Physics.csproj", "{D0DD18D3-4873-42D1-9BFE-61DF145D3974}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -63,6 +67,10 @@ Global
 		{5F446E0F-64DE-4C3C-B0C2-846F44569DDD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5F446E0F-64DE-4C3C-B0C2-846F44569DDD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5F446E0F-64DE-4C3C-B0C2-846F44569DDD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D0DD18D3-4873-42D1-9BFE-61DF145D3974}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D0DD18D3-4873-42D1-9BFE-61DF145D3974}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D0DD18D3-4873-42D1-9BFE-61DF145D3974}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D0DD18D3-4873-42D1-9BFE-61DF145D3974}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -72,6 +80,7 @@ Global
 		{5EE511E0-DA56-4992-83C5-5EE2AAA62961} = {C126D871-D5D3-4AF2-AC05-117630691937}
 		{1810787D-C853-4D8F-B992-0DE04C14AD2E} = {CAD21D41-069C-4699-86E6-2C8C5C207AE3}
 		{5F446E0F-64DE-4C3C-B0C2-846F44569DDD} = {C126D871-D5D3-4AF2-AC05-117630691937}
+		{D0DD18D3-4873-42D1-9BFE-61DF145D3974} = {829D6899-5188-41EF-A99C-F3B74260AEFF}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {40AA9F99-8C2A-4534-A3AF-2969B0294E90}

@@ -1,4 +1,4 @@
-﻿using LemonEngine.Infrastructure.Logic.Objects;
+﻿using LemonEngine.Infrastructure.Logic.Entity;
 using System;
 using System.Collections.Generic;
 using System.Linq;

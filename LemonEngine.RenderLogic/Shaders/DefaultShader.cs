@@ -95,7 +95,7 @@ namespace LemonEngine.RenderLogic.Shaders
             pass_DifColor = in_DifColor;
             pass_SpeColor = in_SpeColor;
             pass_pos = vec3(gl_Position);
-            pass_lightDir = vec3(0,1,1) * mat3(viewMatrixRotation);
+            pass_lightDir = vec3(1,1,-1);// * mat3(viewMatrixRotation);
             if(hasTex == 1){
                 pass_tex = in_tex;
             }
@@ -123,7 +123,7 @@ namespace LemonEngine.RenderLogic.Shaders
 
             float sdn = max(dot(n, s), 0.0);
             
-            vec3 v = normalize(pass_pos);
+            vec3 v = normalize(-pass_pos);
             vec3 r = reflect(-s, n);
 
             vec3 spec = vec3(0.0);

@@ -38,24 +38,18 @@ namespace LemonEngine.RenderLogic.Shaders
             gl.BindFramebufferEXT(OpenGL.GL_FRAMEBUFFER_EXT, _frameBufferHandle);
 
 
-            Console.WriteLine("A2: " + gl.CheckFramebufferStatusEXT(_frameBufferHandle));
-            Console.WriteLine("ERR: " + gl.GetErrorDescription(gl.GetError()));
             //Gen ColorRenderBuffer
             gl.GenRenderbuffersEXT(1, ids);
             _colorRenderBufferHandle = ids[0];
             gl.BindRenderbufferEXT(OpenGL.GL_RENDERBUFFER_EXT, _colorRenderBufferHandle);
             gl.RenderbufferStorageEXT(OpenGL.GL_RENDERBUFFER_EXT, OpenGL.GL_RGBA, width, height); // use a single renderbuffer object for both a depth AND stencil buffer.
 
-            Console.WriteLine("B: " + gl.CheckFramebufferStatusEXT(_frameBufferHandle));
-            Console.WriteLine("ERR: " + gl.GetErrorDescription(gl.GetError()));
             //Gen DepthRenderBuffer
             gl.GenRenderbuffersEXT(1, ids);
             _depthRenderBufferHandle = ids[0];
             gl.BindRenderbufferEXT(OpenGL.GL_RENDERBUFFER_EXT, _depthRenderBufferHandle);
             gl.RenderbufferStorageEXT(OpenGL.GL_RENDERBUFFER_EXT, OpenGL.GL_DEPTH_COMPONENT24, width, height); // use a single renderbuffer object for both a depth AND stencil buffer.
 
-            Console.WriteLine("C: " + gl.CheckFramebufferStatusEXT(_frameBufferHandle));
-            Console.WriteLine("ERR: " + gl.GetErrorDescription(gl.GetError()));
             //Link depth and color buffer
             gl.FramebufferRenderbufferEXT(OpenGL.GL_FRAMEBUFFER_EXT, OpenGL.GL_COLOR_ATTACHMENT0_EXT, OpenGL.GL_RENDERBUFFER_EXT, _colorRenderBufferHandle);
             gl.FramebufferRenderbufferEXT(OpenGL.GL_FRAMEBUFFER_EXT, OpenGL.GL_DEPTH_ATTACHMENT_EXT, OpenGL.GL_RENDERBUFFER_EXT, _depthRenderBufferHandle);

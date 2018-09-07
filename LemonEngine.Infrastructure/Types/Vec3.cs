@@ -73,6 +73,32 @@ namespace LemonEngine.Infrastructure.Types
                             a.Z / b.Z);
         }
 
+        public static Vec3 operator +(Vec3 a, float b)
+        {
+            return new Vec3(a.X + b,
+                a.Y + b,
+                a.Z + b);
+        }
+
+        public static Vec3 operator -(Vec3 a, float b)
+        {
+            return new Vec3(a.X - b,
+                            a.Y - b,
+                            a.Z - b);
+        }
+        public static Vec3 operator *(Vec3 a, float b)
+        {
+            return new Vec3(a.X * b,
+                            a.Y * b,
+                            a.Z * b);
+        }
+        public static Vec3 operator /(Vec3 a, float b)
+        {
+            return new Vec3(a.X / b,
+                            a.Y / b,
+                            a.Z / b);
+        }
+
         public float X
         {
             get
