@@ -25,7 +25,7 @@ namespace Organodron.Main.Game.Scenes
             counter++;
             //context.CameraContext.Position.X = 10 * FMath.Sin(counter / 300f);
             //context.CameraContext.Position.Z = 10 * FMath.Cos(counter / 300f);
-            ent.Rotation.Y = (counter / 100f) % FMath.PI2;
+            //ent.Rotation.Y = (counter / 100f) % FMath.PI2;
         }
 
         public override void Load(IGameContext context)
@@ -38,9 +38,40 @@ namespace Organodron.Main.Game.Scenes
             
             ent = new TestCube();
             ent.Position.X = 0;
-            ent.Position.Z = -20;
+            ent.Position.Z = -15;
+            ent.Position.Y = 3;
+            ent.RotationalVelocity.X = 0.003f;
+            ent.RotationalVelocity.Y = 0.008f;
+            ent.RotationalVelocity.Z = 0.004f;
             context.AddEntity(ent);
-            
+
+            Entity ent2 = new TestCube();
+            ent2.Position.X = 4;
+            ent2.Position.Z = -10;
+            ent2.Position.Y = 2;
+            ent2.RotationalVelocity.X = -0.008f;
+            ent2.RotationalVelocity.Y = 0.002f;
+            ent2.RotationalVelocity.Z = -0.008f;
+            context.AddEntity(ent2);
+
+            Entity ent3 = new TestCube();
+            ent3.Position.X = -3;
+            ent3.Position.Z = -10;
+            ent3.Position.Y = 5;
+            ent3.RotationalVelocity.X = -0.001f;
+            ent3.RotationalVelocity.Y = 0.008f;
+            ent3.RotationalVelocity.Z = -0.001f;
+            context.AddEntity(ent3);
+
+            Entity ent4 = new TestCube();
+            ent4.Position.X = -2;
+            ent4.Position.Z = -10;
+            ent4.Position.Y = 1;
+            ent4.RotationalVelocity.X = 0.008f;
+            ent4.RotationalVelocity.Y = 0.008f;
+            ent4.RotationalVelocity.Z = 0.001f;
+            context.AddEntity(ent4);
+
         }
 
         public override void Unload(IGameContext context)

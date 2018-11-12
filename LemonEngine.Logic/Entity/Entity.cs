@@ -19,6 +19,8 @@ namespace LemonEngine.Logic.Entity
             Rotation = new Vec3();
             RotationDelta = new Vec3();
             Scale = new Vec3(1f,1f,1f);
+            Velocity = new Vec3();
+            RotationalVelocity = new Vec3();
         }
 
         public Guid Id { get; }

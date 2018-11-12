@@ -9,7 +9,7 @@ namespace Organodron.Main.Game.Objects.Test
 {
     public class TestCube : Entity
     {
-        public TestCube() : base("block")
+        public TestCube() : base("Block2")
         {
 
         }
