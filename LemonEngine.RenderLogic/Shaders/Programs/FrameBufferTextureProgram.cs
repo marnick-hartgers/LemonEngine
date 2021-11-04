@@ -60,7 +60,7 @@ namespace LemonEngine.RenderLogic.Shaders.Programs
 
             const int quality = 17;
             const float offset = 1.0 / 500.0;
-            const float bloomMin = 0.4;
+            const float bloomMin = 0.7;
             const float halfTotal = offset * quality / 2;
 
             void main()
@@ -69,21 +69,21 @@ namespace LemonEngine.RenderLogic.Shaders.Programs
                 vec3 col = vec3(0.0);
                 vec3 org = vec3(texture(screenTexture, TexCoords));
 
-                for(int i = 0; i < (quality * quality); i++)
-                {
-                    vec3 sample = vec3(texture(screenTexture, TexCoords + vec2(
-                    -halfTotal + offset * float(i % quality),
-                    -halfTotal + offset * floor(float(i) / quality)
-                    )));
-                    if((sample.r + sample.g + sample.b) / 3.0 > bloomMin){
-                        col = col + sample;
-                    }                    
-                    
-                }
-                col /= (quality * quality);
+                //for(int i = 0; i < (quality * quality); i++)
+                //{
+                //    vec3 sample = vec3(texture(screenTexture, TexCoords + vec2(
+                //    -halfTotal + offset * float(i % quality),
+                //    -halfTotal + offset * floor(float(i) / quality)
+                //    )));
+                //    if((sample.r + sample.g + sample.b) / 3.0 > bloomMin){
+                //        col = col + sample * ((sample.r + sample.g + sample.b) / 3.0);
+                //    }                    
+                //    
+                //}
+                //col /= (quality * quality);
                 
                 
-                org = max(org, col);
+                //org = max(org, col);
                 FragColor = vec4( org, 1.0);
             }
 ";

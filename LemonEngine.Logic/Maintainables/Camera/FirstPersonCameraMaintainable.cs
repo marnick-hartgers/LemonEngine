@@ -17,9 +17,12 @@ namespace LemonEngine.Logic.Maintainables.Camera
             camera.Rotation.Y += ((float)gameContext.MouseMovement.X / 80f);
             camera.Rotation.X += ((float)gameContext.MouseMovement.Y / 80f);
 
-            if (camera.Rotation.X < FMath.PI)
+            if (camera.Rotation.X > FMath.PI / 2f)
             {
-
+                camera.Rotation.X = FMath.PI / 2f;
+            }else if (camera.Rotation.X < FMath.PI / -2f)
+            {
+                camera.Rotation.X = FMath.PI / -2f;
             }
 
         }

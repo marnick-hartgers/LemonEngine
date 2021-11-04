@@ -109,7 +109,7 @@ namespace WallpaperGrabber
             _renderEngine.StartLoad(openGLControl.OpenGL);
             //testDing = _renderEngine.AddRenderable("trainengine", "");
 
-            //testDing = _renderEngine.AddRenderable("low-poly-mill", "");
+            testDing = _renderEngine.AddRenderable("low-poly-mill", "");
             //testDing.Rotation.X = (float)Math.PI / -15.0f;
             testDing.Rotation.Z = (float)Math.PI / 2.0f;
             testDing.Rotation.X = (float)Math.PI / 2.0f;

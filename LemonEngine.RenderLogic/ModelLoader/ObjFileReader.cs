@@ -247,10 +247,10 @@ namespace LemonEngine.RenderLogic.ModelLoader
             float[] result = new float[values.Length];
             for (int index = 0; index < values.Length; index++)
             {
-                if (values[index].IndexOf(".") != -1 && values[index].IndexOf(".") + 5 < values[index].Length)
-                {
-                    values[index] = values[index].Substring(0, values[index].IndexOf(".") + 6);
-                }
+                //if (values[index].IndexOf(".") != -1 && values[index].IndexOf(".") + 5 < values[index].Length)
+                //{
+                //    values[index] = values[index].Substring(0, values[index].IndexOf(".") + 6);
+                //}
                 int exponent = 1;
                 if (values[index].IndexOf('e') != -1)
                 {
@@ -263,7 +263,6 @@ namespace LemonEngine.RenderLogic.ModelLoader
                     }
 
                 }
-
 
                 result[index] = float.Parse(values[index]);
                 if (exponent != 1)
